@@ -1,16 +1,16 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DotWeb Admin")]
+[assembly: AssemblyTitle("DotWeb.Generator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("DotSystem Indonesia")]
-[assembly: AssemblyProduct("DotWeb Admin")]
-[assembly: AssemblyCopyright("Copyright � DotSystem 2016")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("DotWeb.Generator")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("901fbfb1-6451-4bbd-85a2-5a947a06599e")]
+[assembly: Guid("7ec6daf3-e3a7-482f-add7-d02e55773da6")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,7 +29,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
+// You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.1.1.*")]
 [assembly: AssemblyFileVersion("0.1.1.*")]

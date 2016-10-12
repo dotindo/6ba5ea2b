@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotWeb.Tests", "DotWeb.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotWeb.Samples", "DotWeb.Samples\DotWeb.Samples.csproj", "{02F6ED32-6248-4C31-8C6A-B2EF3D0A6587}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotWeb.Generator", "DotWeb.Generator\DotWeb.Generator.csproj", "{F74AE975-17DA-480B-9A1B-5A889B979F84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{02F6ED32-6248-4C31-8C6A-B2EF3D0A6587}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02F6ED32-6248-4C31-8C6A-B2EF3D0A6587}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02F6ED32-6248-4C31-8C6A-B2EF3D0A6587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F74AE975-17DA-480B-9A1B-5A889B979F84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F74AE975-17DA-480B-9A1B-5A889B979F84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F74AE975-17DA-480B-9A1B-5A889B979F84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F74AE975-17DA-480B-9A1B-5A889B979F84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
