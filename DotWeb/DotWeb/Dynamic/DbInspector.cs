@@ -53,7 +53,7 @@ namespace DotWeb
                 app = new App();
                 // App is initiated with a default value
                 var appName = "Sample App " + DateTime.Today.ToShortDateString();
-                if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["appName"]))
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["appName"]))
                     // If appName presents in configuration file, use it
                     appName = ConfigurationManager.AppSettings["appName"];
 
