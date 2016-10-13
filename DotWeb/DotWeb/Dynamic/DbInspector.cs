@@ -23,6 +23,7 @@ namespace DotWeb
         private string dbName = "";
         private SchemaInfo schemaInfo;
         private int appId = 0;
+        private List<PKInfo> pkInfo;
         private List<FKInfo> fkInfo;
 
         /// <summary>
@@ -75,6 +76,7 @@ namespace DotWeb
             if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["appId"]))
                 throw new ArgumentException("appId must be specified in config.");
             appId = int.Parse(ConfigurationManager.AppSettings["appId"].ToString());
+            pkInfo = SqlHelper.GetPrimaryKeySchemaInfo(connectionStringName);
             fkInfo = SqlHelper.GetForeignKeySchemaInfo(connectionStringName);
 
             using (var connection = SqlHelper.OpenConnection(connectionStringName))
@@ -84,7 +86,7 @@ namespace DotWeb
                 foreach (var tableMeta in schemaInfo.Tables)
                 {
                     InspectColumns(connection, tableMeta);
-                    InspectIndexColumns(connection, tableMeta);
+                    InspectPrimaryKeys(connection, tableMeta);
                     InspectForeignKeys(connection, tableMeta);
                 }
             }
@@ -145,17 +147,17 @@ namespace DotWeb
         /// </summary>
         /// <param name="connection">Existing database connection.</param>
         /// <param name="tableMeta">The <see cref="TableMeta"/> in which this column belongs to.</param>
-        private void InspectIndexColumns(DbConnection connection, TableMeta tableMeta)
+        private void InspectPrimaryKeys(DbConnection connection, TableMeta tableMeta)
         {
-            var indexColumns = connection.GetSchema("IndexColumns", new[] { dbName, null, tableMeta.Name });
-            foreach (DataRow row in indexColumns.Rows)
+            var pkColumns = pkInfo.Where(i => i.TableName.Equals(tableMeta.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                i.SchemaName.Equals(tableMeta.SchemaName, StringComparison.InvariantCultureIgnoreCase));
+            foreach (var pkColumn in pkColumns)
             {
-                if (row["constraint_name"].ToString().Substring(0, 3) == "PK_")
+                var columnMeta = tableMeta.Columns.Single(c => c.Name.Equals(pkColumn.ColumnName, StringComparison.InvariantCultureIgnoreCase));
+                if (columnMeta != null)
                 {
-                    var primaryKey = row[indexColumns.Columns["column_name"]].ToString();
-                    var pkColumn = tableMeta.Columns.SingleOrDefault(c => c.Name == primaryKey);
-                    if (pkColumn != null)
-                        pkColumn.IsPrimaryKey = true;
+                    columnMeta.IsPrimaryKey = true;
+                    columnMeta.IsIdentity = pkColumn.IsIdentity;
                 }
             }
         }

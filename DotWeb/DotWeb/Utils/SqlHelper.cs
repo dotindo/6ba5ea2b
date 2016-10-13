@@ -140,10 +140,45 @@ namespace DotWeb.Utils
         }
 
         /// <summary>
-        /// Gets foreign key schema info of a database.
+        /// Gets primary keys schema info of a database.
         /// </summary>
         /// <param name="connectionStringName">Connection string name in web.config.</param>
-        /// <returns></returns>
+        /// <returns>List of <see cref="PKInfo"/> instances.</returns>
+        public static List<PKInfo> GetPrimaryKeySchemaInfo(string connectionStringName)
+        {
+            var sql = " SELECT " +
+                      "     CCU.CONSTRAINT_NAME, " +
+                      "     CCU.TABLE_NAME, " +
+                      "     CCU.COLUMN_NAME, " +
+                      "     COLUMNPROPERTY(OBJECT_ID(CCU.TABLE_NAME), CCU.COLUMN_NAME, 'IsIdentity') AS IS_IDENTITY " +
+                      " FROM " +
+                      "     INFORMATION_SCHEMA.TABLE_CONSTRAINTS TAB, " +
+                      "     INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CCU " +
+                      " WHERE " +
+                      "     CCU.CONSTRAINT_NAME = TAB.CONSTRAINT_NAME " +
+                      "     AND CCU.TABLE_NAME = TAB.TABLE_NAME " +
+                      "     AND CCU.TABLE_SCHEMA = TAB.TABLE_SCHEMA " +
+                      "     AND TAB.CONSTRAINT_TYPE = 'PRIMARY KEY' ";
+
+            var dt = GetDataTable(sql, connectionStringName);
+            var result = new List<PKInfo>();
+            foreach (DataRow row in dt.Rows)
+            {
+                var pkInfo = new PKInfo();
+                pkInfo.ConstraintName = row["CONSTRAINT_NAME"].ToString();
+                pkInfo.TableName = row["TABLE_NAME"].ToString();
+                pkInfo.ColumnName = row["COLUMN_NAME"].ToString();
+                pkInfo.IsIdentity = bool.Parse(row["IS_IDENTITY"].ToString());
+                result.Add(pkInfo);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets foreign keys schema info of a database.
+        /// </summary>
+        /// <param name="connectionStringName">Connection string name in web.config.</param>
+        /// <returns>List of <see cref="FKInfo"/> instances.</returns>
         public static List<FKInfo> GetForeignKeySchemaInfo(string connectionStringName)
         {
             var sql = "SELECT  " +

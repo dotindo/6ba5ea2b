@@ -16,6 +16,7 @@ namespace DotWeb
             DataType = TypeCode.Empty;
             IsForeignKey = false;
             IsPrimaryKey = false;
+            IsIdentity = false;
             DisplayInGrid = true;
         }
 
@@ -80,6 +81,11 @@ namespace DotWeb
         /// If the column is a primary key, set this to true.
         /// </summary>
         public bool IsPrimaryKey { get; set; }
+
+        /// <summary>
+        /// If the column is a primary key, it can be also an identity column.
+        /// </summary>
+        public bool IsIdentity { get; set; }
 
         /// <summary>
         /// If the column is a foreign key, this property holds the table referenced by that key.
