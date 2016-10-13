@@ -72,7 +72,7 @@ namespace DotWeb.UI
                 dataColumn = new GridViewDataTextColumn();
             }
 
-            if (column.IsPrimaryKey && !column.IsForeignKey)
+            if (column.IsPrimaryKey && (column.IsIdentity || !column.IsForeignKey))
                 dataColumn.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.False;
 
             dataColumn.FieldName = column.Name;

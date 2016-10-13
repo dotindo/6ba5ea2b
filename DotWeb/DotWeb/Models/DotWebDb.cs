@@ -16,6 +16,8 @@ namespace DotWeb
 
         public DbSet<ColumnMeta> Columns { get; set; }
 
+        public DbSet<TableMetaRelation> TableRelations { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

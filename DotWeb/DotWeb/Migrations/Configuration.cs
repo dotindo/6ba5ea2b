@@ -29,6 +29,15 @@ namespace DotWeb.Migrations
             // Extra precaution: development database must have 'devl' in its name.
             if (context.Database.Connection.ConnectionString.Contains("devl"))
             {
+                var tableRelations = context.TableRelations;
+                context.TableRelations.RemoveRange(tableRelations);
+                var tables = context.Tables;
+                context.SaveChanges();
+
+                var columns = context.Columns;
+                context.Columns.RemoveRange(columns);
+
+                context.Tables.RemoveRange(tables);
                 var modules = context.Modules;
                 context.Modules.RemoveRange(modules);
                 var groups = context.Groups;
