@@ -148,6 +148,7 @@ namespace DotWeb.Utils
         {
             var sql = " SELECT " +
                       "     CCU.CONSTRAINT_NAME, " +
+                      "     TAB.TABLE_SCHEMA, " +
                       "     CCU.TABLE_NAME, " +
                       "     CCU.COLUMN_NAME, " +
                       "     COLUMNPROPERTY(OBJECT_ID(CCU.TABLE_NAME), CCU.COLUMN_NAME, 'IsIdentity') AS IS_IDENTITY " +
@@ -166,9 +167,11 @@ namespace DotWeb.Utils
             {
                 var pkInfo = new PKInfo();
                 pkInfo.ConstraintName = row["CONSTRAINT_NAME"].ToString();
+                pkInfo.SchemaName = row["TABLE_SCHEMA"].ToString();
                 pkInfo.TableName = row["TABLE_NAME"].ToString();
                 pkInfo.ColumnName = row["COLUMN_NAME"].ToString();
-                pkInfo.IsIdentity = bool.Parse(row["IS_IDENTITY"].ToString());
+                pkInfo.IsIdentity = row["IS_IDENTITY"].ToString() == "1" ? true : 
+                    (row["IS_IDENTITY"].ToString() == "0" ? false : bool.Parse(row["IS_IDENTITY"].ToString()));
                 result.Add(pkInfo);
             }
             return result;
