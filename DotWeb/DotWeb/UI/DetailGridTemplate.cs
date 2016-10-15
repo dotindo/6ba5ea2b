@@ -1,5 +1,7 @@
 ﻿using DevExpress.Web;
 using System;
+using System.Data.Entity;
+using System.Linq;
 using System.Web.UI;
 
 namespace DotWeb.UI
@@ -23,7 +25,7 @@ namespace DotWeb.UI
         public DetailGridTemplate(TableMeta masterTableMeta, string connectionString)
         {
             this.masterTableMeta = masterTableMeta;
-            if (masterTableMeta.Children.Count != 1)
+            if (masterTableMeta.Children.Where(c => c.IsRendered).Count() != 1)
                 throw new ArgumentException(string.Format("Master table {0} has no child table or more than 1 child tables.", masterTableMeta.Name));
             this.detailTable = masterTableMeta.Children[0];
             this.connectionString = connectionString;

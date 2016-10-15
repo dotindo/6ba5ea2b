@@ -34,12 +34,12 @@ namespace DotWeb.Utils
         /// Generates SELECT query for <see cref="TableMeta"/> as detail table in master-detail relationship.
         /// </summary>
         /// <param name="tableMeta">Meta data of table being inspected.</param>
-        /// <param name="foreignKey">Foreign key column meta data, describing master-detail relationship.</param>
+        /// <param name="filterColumn">Column meta data for filtering purpose.</param>
         /// <returns>String, the SELECT query.</returns>
-        public static string GenerateSelectQueryDetail(TableMeta tableMeta, ColumnMeta foreignKey)
+        public static string GenerateSelectQueryFiltered(TableMeta tableMeta, ColumnMeta filterColumn)
         {
             string columnList = string.Join(", ", tableMeta.Columns.Select(m => string.Concat("[", m.Name, "]")));
-            return string.Format("SELECT {0} FROM [{1}].[{2}] WHERE [{3}] = @{3} ", columnList, tableMeta.SchemaName, tableMeta.Name, foreignKey.Name);
+            return string.Format("SELECT {0} FROM [{1}].[{2}] WHERE [{3}] = @{3} ", columnList, tableMeta.SchemaName, tableMeta.Name, filterColumn.Name);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace DotWeb.Utils
         /// <returns>String, the DELETE query.</returns>
         public static string GenerateDeleteQuery(TableMeta tableMeta)
         {
-            return string.Format("DELETE FROM [{0}].[{1}] WHERE [{2}] = @{2} ", tableMeta.SchemaName, tableMeta.Name,
+            return string.Format("DELETE FROM [{0}].[{1}] WHERE {2} ", tableMeta.SchemaName, tableMeta.Name,
                 GenerateWhereConditionForPrimaryKeys(tableMeta.PrimaryKeys));
         }
 
@@ -147,11 +147,11 @@ namespace DotWeb.Utils
         public static List<PKInfo> GetPrimaryKeySchemaInfo(string connectionStringName)
         {
             var sql = " SELECT " +
-                      "     CCU.CONSTRAINT_NAME, " +
-                      "     TAB.TABLE_SCHEMA, " +
-                      "     CCU.TABLE_NAME, " +
-                      "     CCU.COLUMN_NAME, " +
-                      "     COLUMNPROPERTY(OBJECT_ID(CCU.TABLE_NAME), CCU.COLUMN_NAME, 'IsIdentity') AS IS_IDENTITY " +
+                      "      CCU.CONSTRAINT_NAME " +
+                      "     ,TAB.TABLE_SCHEMA " +
+                      "     ,CCU.TABLE_NAME " +
+                      "     ,CCU.COLUMN_NAME " +
+                      "     ,COLUMNPROPERTY(OBJECT_ID(CCU.TABLE_NAME), CCU.COLUMN_NAME, 'IsIdentity') AS IS_IDENTITY " +
                       " FROM " +
                       "     INFORMATION_SCHEMA.TABLE_CONSTRAINTS TAB, " +
                       "     INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CCU " +

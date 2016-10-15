@@ -47,6 +47,7 @@ namespace DotWeb.UI
             masterGrid.SettingsBehavior.ConfirmDelete = true;
             masterGrid.Columns.Add(GridViewHelper.AddGridViewCommandColumns());
             masterGrid.CustomColumnDisplayText += masterGrid_CustomColumnDisplayText;
+            masterGrid.CellEditorInitialize += GridViewHelper.gridView_CellEditorInitialize;
 
             // Create grid view columns
             foreach (var column in tableMeta.Columns.OrderBy(c => c.OrderNo))
