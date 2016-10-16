@@ -98,6 +98,11 @@ namespace DotWeb
         public virtual TableMeta ReferenceTable { get; set; }
 
         /// <summary>
+        /// CIf the column is a foreign key, this property provides mechanism to filter data by column.
+        /// </summary>
+        public string FilterColumn { get; set; }
+
+        /// <summary>
         /// The Id of TableMeta which this column belongs to.
         /// </summary>
         public int TableId { get; set; }

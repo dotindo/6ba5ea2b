@@ -72,7 +72,7 @@ namespace DotWeb.UI
                 dataColumn = new GridViewDataTextColumn();
             }
 
-            if (column.IsPrimaryKey && (column.IsIdentity || !column.IsForeignKey))
+            if (column.IsPrimaryKey && (!column.IsIdentity || !column.IsForeignKey))
                 dataColumn.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.False;
 
             dataColumn.FieldName = column.Name;
@@ -127,12 +127,19 @@ namespace DotWeb.UI
         private static GridViewEditDataColumn AddGridViewForeignKeyColumn(ColumnMeta column, GridViewEditDataColumn dataColumn, string connectionString)
         {
             var comboBoxColumn = new GridViewDataComboBoxColumn();
-            comboBoxColumn.PropertiesComboBox.DataSource = GetLookUpDataSource(column.ReferenceTable, connectionString);
+            ColumnMeta filterColumnMeta = null;
+            if (!string.IsNullOrEmpty(column.FilterColumn))
+                filterColumnMeta = column.ReferenceTable.Columns.SingleOrDefault(c => c.Name.Equals(column.FilterColumn));
+
+            comboBoxColumn.PropertiesComboBox.DataSource = GetLookUpDataSource(column.ReferenceTable, connectionString, filterColumnMeta);
+
             if (column.ReferenceTable.PrimaryKeys.Length > 1)
                 throw new ApplicationException(string.Format("Data source for lookup column {0} has more than one primary key.", column.Name));
+
             comboBoxColumn.PropertiesComboBox.ValueField = column.ReferenceTable.PrimaryKeys[0].Name;
             comboBoxColumn.PropertiesComboBox.TextField = column.ReferenceTable.LookUpDisplayColumn.Name;
             dataColumn = comboBoxColumn;
+
             return dataColumn;
         }
 
@@ -155,7 +162,7 @@ namespace DotWeb.UI
             }
             else
             {
-                ds.SelectCommand = SqlHelper.GenerateSelectQueryDetail(tableMeta, foreignKey);
+                ds.SelectCommand = SqlHelper.GenerateSelectQueryFiltered(tableMeta, foreignKey);
                 ds.SelectParameters.Add(new Parameter(foreignKey.Name, foreignKey.DataType, value.ToString()));
             }
             ds.InsertCommand = SqlHelper.GenerateInsertQuery(tableMeta);
@@ -171,13 +178,26 @@ namespace DotWeb.UI
         /// <param name="tableMeta">Meta data about look up table.</param>
         /// <param name="connectionString">Connection string to the underlying database.</param>
         /// <returns>An instance of <see cref="SqlDataSource"/>.</returns>
-        internal static SqlDataSource GetLookUpDataSource(TableMeta tableMeta, string connectionString)
+        internal static SqlDataSource GetLookUpDataSource(TableMeta tableMeta, string connectionString, ColumnMeta filterColumn = null)
         {
             var ds = new SqlDataSource();
             ds.ConnectionString = connectionString;
-            ds.SelectCommand = SqlHelper.GenerateSelectQuery(tableMeta);
+            if (filterColumn != null)
+                ds.SelectCommand = SqlHelper.GenerateSelectQueryFiltered(tableMeta, filterColumn);
+            else
+                ds.SelectCommand = SqlHelper.GenerateSelectQuery(tableMeta);
 
             return ds;
+        }
+
+        internal static void gridView_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            if (e.Column is GridViewDataComboBoxColumn)
+            {
+                var comboBoxColumn = e.Column as GridViewDataComboBoxColumn;
+                var sqlDataSource = comboBoxColumn.PropertiesComboBox.DataSource as SqlDataSource;
+                var sql = sqlDataSource.SelectCommand;
+            }
         }
 
     }
