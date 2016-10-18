@@ -126,16 +126,11 @@ namespace DotWeb.UI
         /// <returns></returns>
         private static GridViewEditDataColumn AddGridViewForeignKeyColumn(ColumnMeta column, GridViewEditDataColumn dataColumn, string connectionString)
         {
-            var comboBoxColumn = new GridViewDataComboBoxColumn();
-            ColumnMeta filterColumnMeta = null;
-            if (!string.IsNullOrEmpty(column.FilterColumn))
-                filterColumnMeta = column.ReferenceTable.Columns.SingleOrDefault(c => c.Name.Equals(column.FilterColumn));
-
-            comboBoxColumn.PropertiesComboBox.DataSource = GetLookUpDataSource(column.ReferenceTable, connectionString, filterColumnMeta);
-
             if (column.ReferenceTable.PrimaryKeys.Length > 1)
                 throw new ApplicationException(string.Format("Data source for lookup column {0} has more than one primary key.", column.Name));
 
+            var comboBoxColumn = new GridViewDataComboBoxColumn();
+            comboBoxColumn.PropertiesComboBox.DataSource = GetLookUpDataSource(column.ReferenceTable, connectionString);
             comboBoxColumn.PropertiesComboBox.ValueField = column.ReferenceTable.PrimaryKeys[0].Name;
             comboBoxColumn.PropertiesComboBox.TextField = column.ReferenceTable.LookUpDisplayColumn.Name;
             dataColumn = comboBoxColumn;
@@ -178,26 +173,17 @@ namespace DotWeb.UI
         /// <param name="tableMeta">Meta data about look up table.</param>
         /// <param name="connectionString">Connection string to the underlying database.</param>
         /// <returns>An instance of <see cref="SqlDataSource"/>.</returns>
-        internal static SqlDataSource GetLookUpDataSource(TableMeta tableMeta, string connectionString, ColumnMeta filterColumn = null)
+        internal static SqlDataSource GetLookUpDataSource(TableMeta tableMeta, string connectionString)
         {
             var ds = new SqlDataSource();
             ds.ConnectionString = connectionString;
-            if (filterColumn != null)
-                ds.SelectCommand = SqlHelper.GenerateSelectQueryFiltered(tableMeta, filterColumn);
-            else
-                ds.SelectCommand = SqlHelper.GenerateSelectQuery(tableMeta);
+            ds.SelectCommand = SqlHelper.GenerateSelectQuery(tableMeta);
 
             return ds;
         }
 
-        internal static void gridView_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        internal static void BindLookUpComboBox(GridViewDataComboBoxColumn comboBoxColumn, ColumnMeta column, object keyValue)
         {
-            if (e.Column is GridViewDataComboBoxColumn)
-            {
-                var comboBoxColumn = e.Column as GridViewDataComboBoxColumn;
-                var sqlDataSource = comboBoxColumn.PropertiesComboBox.DataSource as SqlDataSource;
-                var sql = sqlDataSource.SelectCommand;
-            }
         }
 
     }
