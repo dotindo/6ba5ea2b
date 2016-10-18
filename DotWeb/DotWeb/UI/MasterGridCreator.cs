@@ -101,20 +101,7 @@ namespace DotWeb.UI
 
         void masterGrid_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
         {
-            var gridView = (sender as ASPxGridView);
-            var columnMeta = tableMeta.Columns.SingleOrDefault(c => c.Name.Equals(e.Column.FieldName, System.StringComparison.InvariantCultureIgnoreCase));
-            if (columnMeta == null)
-                throw new ArgumentException(string.Format("Column meta entry not found for column ", e.Column.FieldName));
-            var sqlDataSource = e.Editor.DataSource as SqlDataSource;
-            ColumnMeta filterColumnMeta = null;
-            if (!string.IsNullOrEmpty(columnMeta.FilterColumn))
-                filterColumnMeta = columnMeta.ReferenceTable.Columns.SingleOrDefault(c => c.Name.Equals(columnMeta.FilterColumn));
-            if (filterColumnMeta != null)
-            {
-                sqlDataSource.SelectCommand += string.Format("WHERE {0} = @{0}", filterColumnMeta.Name);
-                sqlDataSource.SelectParameters.Add(filterColumnMeta.Name, e.KeyValue.ToString());
-            }
-            e.Editor.DataBind();
+            GridViewHelper.gridView_CellEditorInitialize(tableMeta, e);
         }
 
     }

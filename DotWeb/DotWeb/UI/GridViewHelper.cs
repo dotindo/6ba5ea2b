@@ -93,6 +93,7 @@ namespace DotWeb.UI
             var textColumn = new GridViewDataTextColumn();
             if (column.DataType == TypeCode.String && column.MaxLength.HasValue)
                 textColumn.PropertiesTextEdit.MaxLength = column.MaxLength.Value;
+            textColumn.PropertiesTextEdit.ClientSideEvents.KeyDown = "function(s,e) { if (e.htmlEvent.keyCode == ASPxKey.Enter) e.htmlEvent.keyCode = ASPxKey.Tab; }";
             dataColumn = textColumn;
             return dataColumn;
         }
@@ -182,9 +183,31 @@ namespace DotWeb.UI
             return ds;
         }
 
-        internal static void BindLookUpComboBox(GridViewDataComboBoxColumn comboBoxColumn, ColumnMeta column, object keyValue)
+        internal static void gridView_CellEditorInitialize(TableMeta tableMeta, ASPxGridViewEditorEventArgs e)
         {
+            var columnMeta = tableMeta.Columns.SingleOrDefault(c => c.Name.Equals(e.Column.FieldName, System.StringComparison.InvariantCultureIgnoreCase));
+            if (columnMeta == null)
+                throw new ArgumentException(string.Format("Column meta entry not found for column ", e.Column.FieldName));
+            var sqlDataSource = e.Editor.DataSource as SqlDataSource;
+            ColumnMeta filterColumnMeta = null;
+            if (!string.IsNullOrEmpty(columnMeta.FilterColumn))
+                filterColumnMeta = columnMeta.ReferenceTable.Columns.SingleOrDefault(c => c.Name.Equals(columnMeta.FilterColumn));
+            if (filterColumnMeta != null)
+            {
+                sqlDataSource.SelectCommand = SqlHelper.AddWhereConditionIfNotExists(sqlDataSource.SelectCommand, filterColumnMeta.Name);
+                bool found = false;
+                foreach (Parameter parameter in sqlDataSource.SelectParameters)
+                {
+                    if (parameter.Name.Equals(filterColumnMeta.Name, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                    sqlDataSource.SelectParameters.Add(new Parameter(filterColumnMeta.Name, filterColumnMeta.DataType, e.KeyValue.ToString()));
+            }
+            e.Editor.DataBind();
         }
-
     }
 }

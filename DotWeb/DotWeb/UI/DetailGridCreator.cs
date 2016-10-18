@@ -72,12 +72,18 @@ namespace DotWeb.UI
                     detailGrid.Columns.Add(dataColumn);
             }
             detailGrid.KeyFieldName = string.Join(";", detailTableMeta.PrimaryKeys.Select(x => x.Name));
+            detailGrid.CellEditorInitialize += detailGrid_CellEditorInitialize;
             detailGrid.DataSource = GridViewHelper.GetGridViewDataSource(detailTableMeta, connectionString, foreignKey, masterKey);
             detailGrid.DataBind();
             detailGrid.RowInserting += new ASPxDataInsertingEventHandler(detailGrid_RowInserting);
             detailGrid.RowUpdating += new ASPxDataUpdatingEventHandler(detailGrid_RowUpdating);
 
             return detailGrid;
+        }
+
+        void detailGrid_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            GridViewHelper.gridView_CellEditorInitialize(detailTableMeta, e);
         }
 
         /// <summary>

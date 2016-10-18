@@ -104,6 +104,18 @@ namespace DotWeb.Utils
             return sb.ToString();
         }
 
+        public static string AddWhereConditionIfNotExists(string sql, string columnName)
+        {
+            var condition = string.Format("WHERE {0} = @{0} ", columnName);
+            if (sql.IndexOf(condition) == -1)
+            {
+                var sb = new StringBuilder(sql);
+                sb = sb.AppendFormat("WHERE {0} = @{0} ", columnName);
+                return sb.ToString();
+            }
+            return sql;
+        }
+
         /// <summary>
         /// Get data table for SQL query passed as an argument.
         /// </summary>
