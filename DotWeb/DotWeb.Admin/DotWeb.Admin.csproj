@@ -133,7 +133,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+<<<<<<< HEAD
     <None Include="Properties\PublishProfiles\AdminMercy.pubxml" />
+=======
+    <None Include="Properties\PublishProfiles\local.pubxml" />
+>>>>>>> origin/develop
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,5 +1,6 @@
 ﻿using DevExpress.Web;
 using DotWeb.Utils;
+using System;
 using System.Linq;
 using System.Web.UI.WebControls;
 
@@ -47,7 +48,7 @@ namespace DotWeb.UI
             masterGrid.SettingsBehavior.ConfirmDelete = true;
             masterGrid.Columns.Add(GridViewHelper.AddGridViewCommandColumns());
             masterGrid.CustomColumnDisplayText += masterGrid_CustomColumnDisplayText;
-            masterGrid.CellEditorInitialize += GridViewHelper.gridView_CellEditorInitialize;
+            masterGrid.CellEditorInitialize += masterGrid_CellEditorInitialize;
 
             // Create grid view columns
             foreach (var column in tableMeta.Columns.OrderBy(c => c.OrderNo))
@@ -97,5 +98,24 @@ namespace DotWeb.UI
                 }
             }
         }
+
+        void masterGrid_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            var gridView = (sender as ASPxGridView);
+            var columnMeta = tableMeta.Columns.SingleOrDefault(c => c.Name.Equals(e.Column.FieldName, System.StringComparison.InvariantCultureIgnoreCase));
+            if (columnMeta == null)
+                throw new ArgumentException(string.Format("Column meta entry not found for column ", e.Column.FieldName));
+            var sqlDataSource = e.Editor.DataSource as SqlDataSource;
+            ColumnMeta filterColumnMeta = null;
+            if (!string.IsNullOrEmpty(columnMeta.FilterColumn))
+                filterColumnMeta = columnMeta.ReferenceTable.Columns.SingleOrDefault(c => c.Name.Equals(columnMeta.FilterColumn));
+            if (filterColumnMeta != null)
+            {
+                sqlDataSource.SelectCommand += string.Format("WHERE {0} = @{0}", filterColumnMeta.Name);
+                sqlDataSource.SelectParameters.Add(filterColumnMeta.Name, e.KeyValue.ToString());
+            }
+            e.Editor.DataBind();
+        }
+
     }
 }
