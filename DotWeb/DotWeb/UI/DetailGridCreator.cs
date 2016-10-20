@@ -73,6 +73,20 @@ namespace DotWeb.UI
             }
             detailGrid.KeyFieldName = string.Join(";", detailTableMeta.PrimaryKeys.Select(x => x.Name));
             detailGrid.DataSource = GridViewHelper.GetGridViewDataSource(detailTableMeta, connectionString, foreignKey, masterKey);
+
+            // Master-detail scenario
+            if (detailTableMeta.Children.Where(c => c.IsRendered).Count() == 1)
+            {
+                detailGrid.SettingsDetail.ShowDetailRow = true;
+                detailGrid.Templates.DetailRow = new DetailGridTemplate(detailTableMeta, connectionString);
+            }
+            // Master-multiple details scenario
+            else if (detailTableMeta.Children.Where(c => c.IsRendered).Count() > 1)
+            {
+                detailGrid.SettingsDetail.ShowDetailRow = true;
+                detailGrid.Templates.DetailRow = new MultipleDetailGridTemplate(detailTableMeta, connectionString);
+            }
+
             detailGrid.DataBind();
             detailGrid.RowInserting += new ASPxDataInsertingEventHandler(detailGrid_RowInserting);
             detailGrid.RowUpdating += new ASPxDataUpdatingEventHandler(detailGrid_RowUpdating);

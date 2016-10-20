@@ -35,7 +35,7 @@ namespace DotWeb.UI
         public ASPxGridView CreateMasterGrid()
         {
             var masterGrid = new ASPxGridView();
-            masterGrid.ID = "masterGrid";
+            masterGrid.ID = tableMeta.Name.ToCamelCase() + "Grid";
             masterGrid.ClientInstanceName = "masterGrid";
             masterGrid.CssClass = "gridView";
             masterGrid.AutoGenerateColumns = false;

@@ -12,8 +12,8 @@ namespace DotWeb.Migrations
         /// </summary>
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
+            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = false;
         }
 
         /// <summary>

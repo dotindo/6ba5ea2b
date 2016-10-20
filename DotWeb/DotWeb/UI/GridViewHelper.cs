@@ -132,7 +132,9 @@ namespace DotWeb.UI
             var comboBoxColumn = new GridViewDataComboBoxColumn();
             comboBoxColumn.PropertiesComboBox.DataSource = GetLookUpDataSource(column.ReferenceTable, connectionString);
             comboBoxColumn.PropertiesComboBox.ValueField = column.ReferenceTable.PrimaryKeys[0].Name;
-            comboBoxColumn.PropertiesComboBox.TextField = column.ReferenceTable.LookUpDisplayColumn.Name;
+            var lookUpDisplayColumn = column.ReferenceTable.Columns.SingleOrDefault(c => c.Id == column.ReferenceTable.LookUpDisplayColumnId);
+            if (lookUpDisplayColumn != null)
+                comboBoxColumn.PropertiesComboBox.TextField = lookUpDisplayColumn.Name;
             dataColumn = comboBoxColumn;
 
             return dataColumn;

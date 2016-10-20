@@ -47,7 +47,13 @@ namespace DotWeb
         /// The foreign key in the child table to parent table.
         /// </summary>
         [Required, MaxLength(100)]
-        public string ForeignKeyName { get; set; } 
+        public string ForeignKeyName { get; set; }
+
+        /// <summary>
+        /// The name of table relation.
+        /// </summary>
+        [Required, MaxLength(100)]
+        public string Name { get; set; }
 
         /// <summary>
         /// When rendered in master detail grid view, this property can serve as the title of

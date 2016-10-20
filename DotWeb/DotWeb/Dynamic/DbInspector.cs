@@ -99,7 +99,6 @@ namespace DotWeb
         private void InspectTables(DbConnection connection)
         {
             var tables = connection.GetSchema("Tables", new string[] { dbName, null, null, "BASE TABLE" });
-            Helper.WriteData("Tables", tables);
             foreach (DataRow row in tables.Rows)
             {
                 // Exclude entity framework generated__MigrationHistory table
@@ -187,14 +186,16 @@ namespace DotWeb
                         foreignKeyColumn.IsForeignKey = true;
                         foreignKeyColumn.ReferenceTable = schemaInfo.Tables.SingleOrDefault(t => t.Name == refTableName);
                         string fkName = foreignKey.ToTitleCase().Replace(refColName, "").TrimEnd();
-                        var foreignKeyCaption = string.Concat(tableName.ToTitleCase(), " - ", fkName);
+                        var relationName = string.Concat(tableMeta.Name, "_", foreignKeyColumn.ReferenceTable.Name, "_", fkName);
+                        var relationCaption = string.Concat(tableName.ToTitleCase(), " - ", fkName);
                         foreignKeyColumn.ReferenceTable.Children.Add(
                             new TableMetaRelation() 
                             { 
                                 Parent = foreignKeyColumn.ReferenceTable, 
                                 Child = tableMeta,
                                 ForeignKeyName = foreignKeyColumn.Name,
-                                Caption = foreignKeyCaption.TrimEnd() 
+                                Name = relationName,
+                                Caption = relationCaption.TrimEnd() 
                             }
                         );
                     }
@@ -249,14 +250,14 @@ namespace DotWeb
                 var lookUpColumns = tableMeta.Columns.Where(c => c.Name.Equals("Name", StringComparison.InvariantCultureIgnoreCase)
                     || c.Name.Equals("Title", StringComparison.InvariantCultureIgnoreCase)).ToList();
                 if (lookUpColumns.Count > 0)
-                    tableMeta.LookUpDisplayColumn = lookUpColumns[0];
+                    tableMeta.LookUpDisplayColumnId = lookUpColumns[0].Id;
                 else
                 {
                     lookUpColumns = tableMeta.Columns.Where(c => c.DataType == TypeCode.String).ToList();
                     if (lookUpColumns.Count > 0)
-                        tableMeta.LookUpDisplayColumn = lookUpColumns[0];
+                        tableMeta.LookUpDisplayColumnId = lookUpColumns[0].Id;
                     else
-                        tableMeta.LookUpDisplayColumn = tableMeta.Columns[0];
+                        tableMeta.LookUpDisplayColumnId = tableMeta.Columns[0].Id;
                 }
             }
 
@@ -316,13 +317,19 @@ namespace DotWeb
                 TableMeta dbTable = context.Tables
                     .Include(t => t.Columns)
                     .Include(t => t.Children)
-                    .Include(t => t.LookUpDisplayColumn)
                     .Include(t => t.App)
                     .SingleOrDefault(t => t.Name == tableMeta.Name && t.AppId == appId);
+
                 if (dbTable == null)
                 {
+                    // Add table
                     dbTable = tableMeta;
                     context.Tables.Add(dbTable);
+                }
+                else
+                {
+                    // Update existing table
+                    dbTable.SchemaName = tableMeta.SchemaName;
                 }
 
                 foreach (var columnMeta in tableMeta.Columns)
@@ -330,8 +337,37 @@ namespace DotWeb
                     ColumnMeta dbColumn = dbTable.Columns.SingleOrDefault(c => c.Name == columnMeta.Name);
                     if (dbColumn == null)
                     {
+                        // Add columns
                         dbColumn = columnMeta;
                         dbTable.Columns.Add(dbColumn);
+                    }
+                    else
+                    {
+                        // Update existing column
+                        dbColumn.DataType = columnMeta.DataType;
+                        dbColumn.IsForeignKey = columnMeta.IsForeignKey;
+                        dbColumn.IsIdentity = columnMeta.IsIdentity;
+                        dbColumn.IsPrimaryKey = columnMeta.IsPrimaryKey;
+                        dbColumn.IsRequired = columnMeta.IsRequired;
+                        dbColumn.MaxLength = columnMeta.MaxLength;
+                        dbColumn.ReferenceTableId = columnMeta.ReferenceTableId;
+                    }
+                }
+
+                foreach (var tableMetaRelation in tableMeta.Children)
+                {
+                    TableMetaRelation dbRelation = dbTable.Children.SingleOrDefault(r => r.Name.Equals(tableMetaRelation.Name, StringComparison.InvariantCultureIgnoreCase));
+                    if (dbRelation == null)
+                    {
+                        // Add relation
+                        dbRelation = tableMetaRelation;
+                        dbTable.Children.Add(dbRelation);
+                    }
+                    else
+                    {
+                        // Update existing relation
+                        dbRelation.ChildId = tableMetaRelation.ChildId;
+                        dbRelation.ParentId = tableMetaRelation.ParentId;
                     }
                 }
             }
@@ -367,7 +403,6 @@ namespace DotWeb
             schemaInfo.Tables = context.Tables
                 .Include(t => t.Columns)
                 .Include(t => t.Children)
-                .Include(t => t.LookUpDisplayColumn)
                 .Include(t => t.App)
                 .Where(t => t.AppId == appId).ToList();
 
