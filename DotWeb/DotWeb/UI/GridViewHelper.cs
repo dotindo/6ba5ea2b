@@ -184,8 +184,19 @@ namespace DotWeb.UI
             return ds;
         }
 
-        internal static void BindLookUpComboBox(GridViewDataComboBoxColumn comboBoxColumn, ColumnMeta column, object keyValue)
+        public static void gridView_CustomColumnDisplayText(object sender, DevExpress.Web.ASPxGridViewColumnDisplayTextEventArgs e, int gridTextColumnMaxLength)
         {
+            var gridView = (sender as ASPxGridView);
+            if (e.Column is GridViewDataTextColumn)
+            {
+                var textColumn = e.Column as GridViewDataTextColumn;
+                if (textColumn.PropertiesTextEdit.MaxLength == 0)
+                {
+                    var cellValue = e.Value.ToString();
+                    if (cellValue.Length > gridTextColumnMaxLength)
+                        e.DisplayText = cellValue.Substring(0, gridTextColumnMaxLength) + "...";
+                }
+            }
         }
 
     }

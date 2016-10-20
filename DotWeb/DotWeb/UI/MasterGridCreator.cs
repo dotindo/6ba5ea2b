@@ -86,17 +86,7 @@ namespace DotWeb.UI
         /// <param name="e">Event args, an instance of <see cref="ASPxGridViewColumnDisplayTextEventArgs"/></param>
         void masterGrid_CustomColumnDisplayText(object sender, ASPxGridViewColumnDisplayTextEventArgs e)
         {
-            var gridView = (sender as ASPxGridView);
-            if (e.Column is GridViewDataTextColumn)
-            {
-                var textColumn = e.Column as GridViewDataTextColumn;
-                if (textColumn.PropertiesTextEdit.MaxLength == 0)
-                {
-                    var cellValue = e.Value.ToString();
-                    if (cellValue.Length > tableMeta.App.GridTextColumnMaxLength)
-                        e.DisplayText = cellValue.Substring(0, tableMeta.App.GridTextColumnMaxLength) + "...";
-                }
-            }
+            GridViewHelper.gridView_CustomColumnDisplayText(sender, e, tableMeta.App.GridTextColumnMaxLength);
         }
 
         void masterGrid_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
