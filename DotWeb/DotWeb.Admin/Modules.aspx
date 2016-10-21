@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.master" AutoEventWireup="true" CodeBehind="Modules.aspx.cs" Inherits="DotWeb.Admin.Modules" %>
 <asp:Content ID="pageTitle" ContentPlaceHolderID="PageTitle" runat="server">Groups / Modules</asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="MainContent" runat="server">
-    <dx:ASPxFormLayout ID="filterLayout" runat="server">
+    <dx:ASPxFormLayout ID="filterLayout" runat="server" CssClass="filterFormLayout">
         <Items>
             <dx:LayoutItem Caption="Application:">
                 <LayoutItemNestedControlCollection>
@@ -22,8 +22,8 @@
     </dx:ASPxFormLayout>
 
 	<dx:ASPxGridView ID="gridView" runat="server" AutoGenerateColumns="false" DataSourceID="groupsDataSource" ClientInstanceName="gridView"
-		KeyFieldName="Id" CssClass="gridView" OnCellEditorInitialize="gridView_CellEditorInitialize" OnCustomCallback="gridView_CustomCallback" 
-        OnRowInserting="gridView_RowInserting" OnRowUpdating="gridView_RowUpdating">
+		KeyFieldName="Id" CssClass="gridView" OnCustomCallback="gridView_CustomCallback" OnInit="gridView_Init"
+        OnRowInserting="gridView_RowInserting" OnRowUpdating="gridView_RowUpdating" OnCellEditorInitialize="gridView_CellEditorInitialize">
 		<Columns>
 			<dx:GridViewCommandColumn ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0"></dx:GridViewCommandColumn>
             <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" Visible="false">
@@ -58,9 +58,9 @@
                                 <ContentCollection>
                                     <dx:ContentControl runat="server">
                                         <dx:ASPxGridView ID="modulesGridView" runat="server" AutoGenerateColumns="false" DataSourceID="modulesDataSource" 
-                                            ClientInstanceName="modulesGridView" KeyFieldName="Id" CssClass="gridView" 
+                                            ClientInstanceName="modulesGridView" KeyFieldName="Id" CssClass="gridView" OnInit="modulesGridView_Init"
                                             OnBeforePerformDataSelect="modulesGridView_BeforePerformDataSelect" OnRowInserting="modulesGridView_RowInserting" 
-                                            OnRowUpdating="modulesGridView_RowUpdating">
+                                            OnRowUpdating="modulesGridView_RowUpdating" OnCellEditorInitialize="modulesGridView_CellEditorInitialize">
                                             <Columns>
 			                                    <dx:GridViewCommandColumn ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0"></dx:GridViewCommandColumn>
                                                 <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" Visible="false">
@@ -86,6 +86,10 @@
                                                 </dx:GridViewDataTextColumn>
                                                 <dx:GridViewDataCheckColumn FieldName="ShowInLeftMenu" Caption="Show In Left Menu">
                                                 </dx:GridViewDataCheckColumn>
+                                                <dx:GridViewDataComboBoxColumn FieldName="GroupId" Caption="Group">
+                                                    <PropertiesComboBox DataSourceID="groupsDataSource" ValueField="Id" TextField="Title">
+                                                    </PropertiesComboBox>
+                                                </dx:GridViewDataComboBoxColumn>
                                             </Columns>
 		                                    <Settings ShowGroupPanel="false" />
 		                                    <SettingsPager PageSize="25" />

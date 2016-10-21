@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.master" AutoEventWireup="true" CodeBehind="Tables.aspx.cs" Inherits="DotWeb.Admin.Tables" %>
 <asp:Content ID="pageTitle" ContentPlaceHolderID="PageTitle" runat="server">Tables</asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="MainContent" runat="server">
-    <dx:ASPxFormLayout ID="filterLayout" runat="server">
+    <dx:ASPxFormLayout ID="filterLayout" runat="server" CssClass="filterFormLayout">
         <Items>
             <dx:LayoutItem Caption="Application:">
                 <LayoutItemNestedControlCollection>
@@ -23,7 +23,7 @@
 
 	<dx:ASPxGridView ID="gridView" runat="server" AutoGenerateColumns="false" DataSourceID="tablesDataSource" ClientInstanceName="gridView"
 		KeyFieldName="Id" CssClass="gridView" OnCustomColumnDisplayText="gridView_CustomColumnDisplayText" OnCustomCallback="gridView_CustomCallback"
-        OnRowUpdating="gridView_RowUpdating">
+        OnRowUpdating="gridView_RowUpdating" OnCellEditorInitialize="gridView_CellEditorInitialize">
 		<Columns>
 			<dx:GridViewCommandColumn ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0"></dx:GridViewCommandColumn>
             <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" Visible="false">
@@ -40,6 +40,10 @@
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="SchemaName" Caption="Schema Name" ReadOnly="true">
             </dx:GridViewDataTextColumn>
+            <dx:GridViewDataComboBoxColumn FieldName="LookUpDisplayColumnId" Caption="Look Up Display">
+                <PropertiesComboBox DataSourceID="columnsDataSource" ValueField="Id" TextField="Name">
+                </PropertiesComboBox>
+            </dx:GridViewDataComboBoxColumn>
 		</Columns>
         <Templates>
             <DetailRow>

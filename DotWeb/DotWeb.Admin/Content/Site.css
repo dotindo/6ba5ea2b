@@ -819,3 +819,7 @@
 input[readonly], input[readonly="readonly"] {
     background-color: #dedede !important;
 }
+
+.filterFormLayout { 
+    margin: 10px !important; 
+}

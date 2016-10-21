@@ -27,6 +27,11 @@ namespace DotWeb.Admin
             gridView.DataBind();
         }
 
+        protected void gridView_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            Session["TableId"] = e.KeyValue.ToString();
+        }
+
         protected void gridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             e.NewValues["AppId"] = Session["AppId"].ToString();
