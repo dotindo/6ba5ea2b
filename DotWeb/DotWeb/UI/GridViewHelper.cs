@@ -72,7 +72,7 @@ namespace DotWeb.UI
                 dataColumn = new GridViewDataTextColumn();
             }
 
-            if (column.IsPrimaryKey && (!column.IsIdentity || !column.IsForeignKey))
+            if (column.IsIdentity)
                 dataColumn.EditFormSettings.Visible = DevExpress.Utils.DefaultBoolean.False;
 
             dataColumn.FieldName = column.Name;
@@ -133,7 +133,9 @@ namespace DotWeb.UI
             var comboBoxColumn = new GridViewDataComboBoxColumn();
             comboBoxColumn.PropertiesComboBox.DataSource = GetLookUpDataSource(column.ReferenceTable, connectionString);
             comboBoxColumn.PropertiesComboBox.ValueField = column.ReferenceTable.PrimaryKeys[0].Name;
-            comboBoxColumn.PropertiesComboBox.TextField = column.ReferenceTable.LookUpDisplayColumn.Name;
+            var lookUpDisplayColumn = column.ReferenceTable.Columns.SingleOrDefault(c => c.Id == column.ReferenceTable.LookUpDisplayColumnId);
+            if (lookUpDisplayColumn != null)
+                comboBoxColumn.PropertiesComboBox.TextField = lookUpDisplayColumn.Name;
             dataColumn = comboBoxColumn;
 
             return dataColumn;
@@ -208,6 +210,21 @@ namespace DotWeb.UI
                     sqlDataSource.SelectParameters.Add(new Parameter(filterColumnMeta.Name, filterColumnMeta.DataType, e.KeyValue.ToString()));
             }
             e.Editor.DataBind();
+        }
+
+        public static void gridView_CustomColumnDisplayText(object sender, DevExpress.Web.ASPxGridViewColumnDisplayTextEventArgs e, int gridTextColumnMaxLength)
+        {
+            var gridView = (sender as ASPxGridView);
+            if (e.Column is GridViewDataTextColumn)
+            {
+                var textColumn = e.Column as GridViewDataTextColumn;
+                if (textColumn.PropertiesTextEdit.MaxLength == 0)
+                {
+                    var cellValue = e.Value.ToString();
+                    if (cellValue.Length > gridTextColumnMaxLength)
+                        e.DisplayText = cellValue.Substring(0, gridTextColumnMaxLength) + "...";
+                }
+            }
         }
     }
 }

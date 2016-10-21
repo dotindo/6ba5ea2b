@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using System.Linq;
 using System.Web.UI;
 
 namespace DotWeb.UI
@@ -37,7 +38,7 @@ namespace DotWeb.UI
             masterKey = ((GridViewDetailRowTemplateContainer)parent).KeyValue;
 
             var pageControl = new ASPxPageControl();
-            foreach (var childTableMeta in masterTableMeta.Children)
+            foreach (var childTableMeta in masterTableMeta.Children.Where(c => c.IsRendered == true))
             {
                 var tabPage = new TabPage(childTableMeta.Caption);
                 var gridCreator = new DetailGridCreator(childTableMeta, masterTableMeta, masterKey, connectionString);

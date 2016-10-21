@@ -39,7 +39,7 @@
                     </SeparatorStyle>
                 </Separator>
                 <ContentCollection>
-                    <dx:SplitterContentControl>
+                    <dx:SplitterContentControl CssClass="mainContent">
                         <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
                     </dx:SplitterContentControl>
                 </ContentCollection>

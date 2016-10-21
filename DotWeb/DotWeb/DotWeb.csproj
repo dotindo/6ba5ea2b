@@ -58,6 +58,10 @@
   <ItemGroup>
     <Compile Include="Attributes\ScaffoldAttribute.cs" />
     <Compile Include="Attributes\LookUpDisplayAttribute.cs" />
+    <Compile Include="Migrations\201610200014335_Initial.cs" />
+    <Compile Include="Migrations\201610200014335_Initial.Designer.cs">
+      <DependentUpon>201610200014335_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\App.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DotWebDb.cs" />
@@ -95,7 +99,9 @@
     <Compile Include="Utils\Helper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -220,10 +226,15 @@
     <Content Include="lib\readme.txt" />
     <Content Include="readme.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201610200014335_Initial.resx">
+      <DependentUpon>201610200014335_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)\..\..\5c567933\DotMercy\DotMercy\lib\DotWeb\$(ProjectName).dll"
+copy /Y "$(TargetDir)$(ProjectName).pdb" "$(SolutionDir)\..\..\5c567933\DotMercy\DotMercy\lib\DotWeb\$(ProjectName).pdb"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

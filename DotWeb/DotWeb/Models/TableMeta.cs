@@ -94,11 +94,6 @@ namespace DotWeb
         public int? LookUpDisplayColumnId { get; set; }
 
         /// <summary>
-        /// This property is related to <see cref="LookUpDisplayColumnId"/>.
-        /// </summary>
-        public virtual ColumnMeta LookUpDisplayColumn { get; set; } 
-
-        /// <summary>
         /// String representation of TableMeta.
         /// </summary>
         /// <returns>String, should match the Name property.</returns>

@@ -99,7 +99,6 @@ namespace DotWeb
         private void InspectTables(DbConnection connection)
         {
             var tables = connection.GetSchema("Tables", new string[] { dbName, null, null, "BASE TABLE" });
-            Helper.WriteData("Tables", tables);
             foreach (DataRow row in tables.Rows)
             {
                 // Exclude entity framework generated__MigrationHistory table
@@ -187,14 +186,16 @@ namespace DotWeb
                         foreignKeyColumn.IsForeignKey = true;
                         foreignKeyColumn.ReferenceTable = schemaInfo.Tables.SingleOrDefault(t => t.Name == refTableName);
                         string fkName = foreignKey.ToTitleCase().Replace(refColName, "").TrimEnd();
-                        var foreignKeyCaption = string.Concat(tableName.ToTitleCase(), " - ", fkName);
+                        var relationName = string.Concat(tableMeta.Name, "_", foreignKeyColumn.ReferenceTable.Name, "_", fkName);
+                        var relationCaption = string.Concat(tableName.ToTitleCase(), " - ", fkName);
                         foreignKeyColumn.ReferenceTable.Children.Add(
                             new TableMetaRelation() 
                             { 
                                 Parent = foreignKeyColumn.ReferenceTable, 
                                 Child = tableMeta,
                                 ForeignKeyName = foreignKeyColumn.Name,
-                                Caption = foreignKeyCaption.TrimEnd() 
+                                Name = relationName,
+                                Caption = relationCaption.TrimEnd() 
                             }
                         );
                     }
@@ -205,7 +206,8 @@ namespace DotWeb
         /// <summary>
         /// This is to generate menu items and groups for navigation menu purpose.
         /// </summary>
-        private void GenerateNavigationModules()
+        /// <param name="context">An instance of <see cref="DotWebDb"/>.</param>
+        private void GenerateNavigationModules(DotWebDb context)
         {
             foreach (var tableMeta in schemaInfo.Tables)
             {
@@ -224,8 +226,10 @@ namespace DotWeb
                     schemaInfo.App.Groups.Add(group);
                 }
 
-                var module = group.Modules.SingleOrDefault(m => m.TableName.Equals(tableMeta.Name, StringComparison.InvariantCultureIgnoreCase));
-                if (module == null)
+                var dbModule = context.Modules.Include(m => m.Group).SingleOrDefault(m => m.TableName.Equals(tableMeta.Name, StringComparison.InvariantCultureIgnoreCase)
+                    && m.Group.AppId == appId);
+                
+                if (dbModule == null)
                     group.Modules.Add(new Module()
                     {
                         TableName = tableMeta.Name,
@@ -241,22 +245,24 @@ namespace DotWeb
         /// it will be deducted from column which name is Name or Title. It thera are no such column names, the 
         /// the first column will be used instead.
         /// </summary>
-        private void DetermineColumnForLookUpDisplay()
+        /// <param name="context"></param>
+        private void DetermineColumnForLookUpDisplay(DotWebDb context)
         {
-            foreach (var tableMeta in schemaInfo.Tables)
+            var tables = context.Tables.Include(t => t.Columns).Where(t => t.AppId == appId && t.LookUpDisplayColumnId == null);
+            foreach (var table in tables)
             {
                 // Determines lookup display column
-                var lookUpColumns = tableMeta.Columns.Where(c => c.Name.Equals("Name", StringComparison.InvariantCultureIgnoreCase)
+                var lookUpColumns = table.Columns.Where(c => c.Name.Equals("Name", StringComparison.InvariantCultureIgnoreCase)
                     || c.Name.Equals("Title", StringComparison.InvariantCultureIgnoreCase)).ToList();
                 if (lookUpColumns.Count > 0)
-                    tableMeta.LookUpDisplayColumn = lookUpColumns[0];
+                    table.LookUpDisplayColumnId = lookUpColumns[0].Id;
                 else
                 {
-                    lookUpColumns = tableMeta.Columns.Where(c => c.DataType == TypeCode.String).ToList();
+                    lookUpColumns = table.Columns.Where(c => c.DataType == TypeCode.String).ToList();
                     if (lookUpColumns.Count > 0)
-                        tableMeta.LookUpDisplayColumn = lookUpColumns[0];
+                        table.LookUpDisplayColumnId = lookUpColumns[0].Id;
                     else
-                        tableMeta.LookUpDisplayColumn = tableMeta.Columns[0];
+                        table.LookUpDisplayColumnId = table.Columns[0].Id;
                 }
             }
 
@@ -311,33 +317,128 @@ namespace DotWeb
                 context = new DotWebDb();
 
             EnsureApp(context);
+
+            // Save tables
             foreach (var tableMeta in SchemaInfo.Tables)
             {
+                Console.WriteLine("Processing table " + tableMeta.Name);
+
                 TableMeta dbTable = context.Tables
                     .Include(t => t.Columns)
+                    .Include(t => t.Columns.Select(c => c.ReferenceTable))
                     .Include(t => t.Children)
-                    .Include(t => t.LookUpDisplayColumn)
+                    .Include(t => t.Children.Select(c => c.Parent))
+                    .Include(t => t.Children.Select(c => c.Child))
                     .Include(t => t.App)
                     .SingleOrDefault(t => t.Name == tableMeta.Name && t.AppId == appId);
+
+                var newTable = false;
                 if (dbTable == null)
                 {
+                    // Add table
                     dbTable = tableMeta;
-                    context.Tables.Add(dbTable);
+                    newTable = true;
+                }
+                else
+                {
+                    // Update existing table
+                    dbTable.SchemaName = tableMeta.SchemaName;
                 }
 
                 foreach (var columnMeta in tableMeta.Columns)
                 {
-                    ColumnMeta dbColumn = dbTable.Columns.SingleOrDefault(c => c.Name == columnMeta.Name);
+                    Console.WriteLine("    Processing column " + columnMeta.Name + " of table " + tableMeta.Name);
+                    ColumnMeta dbColumn = context.Columns.SingleOrDefault(c => c.TableId == dbTable.Id && c.Name == columnMeta.Name);
+                    var newColumn = false;
                     if (dbColumn == null)
                     {
+                        // Add columns
                         dbColumn = columnMeta;
+                        dbColumn.Table = dbTable;
+                        newColumn = true;
+                    }
+                    else
+                    {
+                        // Update existing column
+                        dbColumn.DataType = columnMeta.DataType;
+                        dbColumn.IsForeignKey = columnMeta.IsForeignKey;
+                        dbColumn.IsIdentity = columnMeta.IsIdentity;
+                        dbColumn.IsPrimaryKey = columnMeta.IsPrimaryKey;
+                        dbColumn.IsRequired = columnMeta.IsRequired;
+                        dbColumn.MaxLength = columnMeta.MaxLength;
+                    }
+
+                    if (columnMeta.ReferenceTable != null && (newColumn || dbColumn.ReferenceTable.Name != columnMeta.ReferenceTable.Name))
+                    {
+                        var dbRefTable = context.Tables.SingleOrDefault(t => tableMeta.AppId == appId
+                            && t.Name.Equals(columnMeta.ReferenceTable.Name, StringComparison.InvariantCultureIgnoreCase));
+                        if (dbRefTable != null)
+                            dbColumn.ReferenceTable = dbRefTable;
+                    }
+
+                    if (newColumn && !newTable)
                         dbTable.Columns.Add(dbColumn);
+                }
+
+                // removes columns
+                var removedColumns = new List<ColumnMeta>();
+                foreach (var dbColumn in dbTable.Columns)
+                {
+                    ColumnMeta column = tableMeta.Columns.SingleOrDefault(c => c.Name.Equals(dbColumn.Name, StringComparison.InvariantCultureIgnoreCase));
+                    if (column == null)
+                    {
+                        Console.WriteLine("    Removing column " + dbColumn.Name + " from table " + tableMeta.Name);
+                        // column has been deleted or renamed, so delete related metadata
+                        removedColumns.Add(dbColumn);
                     }
                 }
-            }
+                if (removedColumns.Count > 0)
+                    context.Columns.RemoveRange(removedColumns);
 
-            if (context.ChangeTracker.HasChanges())
-                context.SaveChanges();
+                // Processing table meta relations
+                foreach (var tableMetaRelation in tableMeta.Children)
+                {
+                    Console.WriteLine("    Processing relation " + tableMetaRelation.Name + " of table " + tableMeta.Name);
+                    TableMetaRelation dbRelation = context.TableRelations.Include(r => r.Child).Include(r => r.Parent)
+                        .SingleOrDefault(r => r.Name.Equals(tableMetaRelation.Name, StringComparison.InvariantCultureIgnoreCase));
+                    if (dbRelation == null)
+                    {
+                        // Add relation
+                        var dbChild = context.Tables.SingleOrDefault(t => t.AppId == appId && t.Name == tableMetaRelation.Child.Name);
+                        if (dbChild != null)
+                            tableMetaRelation.Child = dbChild;
+
+                        var dbParent = context.Tables.SingleOrDefault(t => t.AppId == appId && t.Name == tableMetaRelation.Parent.Name);
+                        if (dbParent != null)
+                            tableMetaRelation.Parent = dbParent;
+                        dbRelation = tableMetaRelation;
+                        context.TableRelations.Add(dbRelation);
+                    }
+                    else
+                    {
+                        // Update existing relation
+                        if (dbRelation.Child.Name != tableMetaRelation.Child.Name)
+                        {
+                            var dbChild = context.Tables.SingleOrDefault(t => t.AppId == appId && t.Name == tableMetaRelation.Child.Name);
+                            if (dbChild != null)
+                                dbRelation.Child = dbChild;
+                        }
+
+                        if (dbRelation.Parent.Name != tableMetaRelation.Parent.Name)
+                        {
+                            var dbParent = context.Tables.SingleOrDefault(t => t.AppId == appId && t.Name == tableMetaRelation.Parent.Name);
+                            if (dbParent != null)
+                                dbRelation.Parent = dbParent;
+                        }
+                    }
+                }
+
+                if (newTable)
+                    context.Tables.Add(dbTable);
+
+                if (context.ChangeTracker.HasChanges())
+                    context.SaveChanges();
+            }
 
             if (!sharedContext)
                 context.Dispose();
@@ -367,7 +468,6 @@ namespace DotWeb
             schemaInfo.Tables = context.Tables
                 .Include(t => t.Columns)
                 .Include(t => t.Children)
-                .Include(t => t.LookUpDisplayColumn)
                 .Include(t => t.App)
                 .Where(t => t.AppId == appId).ToList();
 
@@ -384,10 +484,9 @@ namespace DotWeb
             dbConfig = new DotWebDb();
             EnsureApp(dbConfig);
             Inspect(connectionStringName);
-            GenerateNavigationModules();
+            GenerateNavigationModules(dbConfig);
             SaveToConfig(true);
-
-            DetermineColumnForLookUpDisplay();
+            DetermineColumnForLookUpDisplay(dbConfig);
             SaveToConfig(true);
 
             dbConfig.Dispose();

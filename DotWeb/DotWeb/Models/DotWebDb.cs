@@ -28,9 +28,6 @@ namespace DotWeb
             modelBuilder.Entity<TableMeta>()
                 .HasMany(x => x.Parents).WithRequired(y => y.Child).HasForeignKey(f => f.ChildId).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<TableMeta>()
-                .HasOptional(x => x.LookUpDisplayColumn).WithMany().HasForeignKey(f => f.LookUpDisplayColumnId).WillCascadeOnDelete(false);
-
             modelBuilder.Entity<ColumnMeta>()
                 .HasRequired(x => x.Table).WithMany(y => y.Columns).HasForeignKey(f => f.TableId);
 
