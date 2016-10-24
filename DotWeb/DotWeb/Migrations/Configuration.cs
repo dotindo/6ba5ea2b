@@ -40,8 +40,8 @@ namespace DotWeb.Migrations
                 context.Tables.RemoveRange(tables);
                 var modules = context.Modules;
                 context.Modules.RemoveRange(modules);
-                var groups = context.Groups;
-                context.Groups.RemoveRange(groups);
+                var groups = context.ModuleGroups;
+                context.ModuleGroups.RemoveRange(groups);
                 var apps = context.Apps;
                 context.Apps.RemoveRange(apps);
                 context.SaveChanges();

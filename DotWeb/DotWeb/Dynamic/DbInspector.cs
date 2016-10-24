@@ -216,7 +216,7 @@ namespace DotWeb
                     g => g.AppId == appId && g.Name.Equals(groupName, StringComparison.InvariantCultureIgnoreCase));
                 if (group == null)
                 {
-                    group = new Group()
+                    group = new ModuleGroup()
                     {
                         AppId = appId,
                         Name = groupName,

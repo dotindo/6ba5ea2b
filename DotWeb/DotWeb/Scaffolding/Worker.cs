@@ -124,8 +124,8 @@ namespace DotWeb
             dbConfig.Modules.RemoveRange(deletedModules);
             dbConfig.SaveChanges();
 
-            var emptyGroups = dbConfig.Groups.Include(g => g.Modules).Where(g => g.Modules.Count == 0).ToList();
-            dbConfig.Groups.RemoveRange(emptyGroups);
+            var emptyGroups = dbConfig.ModuleGroups.Include(g => g.Modules).Where(g => g.Modules.Count == 0).ToList();
+            dbConfig.ModuleGroups.RemoveRange(emptyGroups);
             dbConfig.SaveChanges();
         }
 
@@ -449,11 +449,11 @@ namespace DotWeb
             if (string.IsNullOrEmpty(entityMeta.ScaffoldGroupTitle))
                 return;
 
-            var group = dbConfig.Groups.Include(g => g.App).Where(g => g.App.Id == appId && g.Title.Equals(entityMeta.ScaffoldGroupTitle)).SingleOrDefault();
+            var group = dbConfig.ModuleGroups.Include(g => g.App).Where(g => g.App.Id == appId && g.Title.Equals(entityMeta.ScaffoldGroupTitle)).SingleOrDefault();
             if (group == null)
             {
-                group = new Group() { App = app, Title = entityMeta.ScaffoldGroupTitle, OrderNo = entityMeta.ScaffoldGroupOrderNo };
-                dbConfig.Groups.Add(group);
+                group = new ModuleGroup() { App = app, Title = entityMeta.ScaffoldGroupTitle, OrderNo = entityMeta.ScaffoldGroupOrderNo };
+                dbConfig.ModuleGroups.Add(group);
                 dbConfig.SaveChanges();
             }
 

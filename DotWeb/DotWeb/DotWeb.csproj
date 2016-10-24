@@ -62,11 +62,20 @@
     <Compile Include="Migrations\201610200014335_Initial.Designer.cs">
       <DependentUpon>201610200014335_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610220327210_Security.cs" />
+    <Compile Include="Migrations\201610220327210_Security.Designer.cs">
+      <DependentUpon>201610220327210_Security.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\App.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DotWebDb.cs" />
     <Compile Include="Dynamic\SchemaInfo.cs" />
+    <Compile Include="Models\Permission.cs" />
+    <Compile Include="Models\PermissionLevel.cs" />
+    <Compile Include="Models\PrincipalBase.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserGroup.cs" />
     <Compile Include="UI\EditPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -82,7 +91,7 @@
     <Compile Include="UI\MultipleDetailGridTemplate.cs" />
     <Compile Include="Utils\FKInfo.cs" />
     <Compile Include="UI\GridViewHelper.cs" />
-    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\ModuleGroup.cs" />
     <Compile Include="Models\Module.cs" />
     <Compile Include="Models\ColumnMeta.cs" />
     <Compile Include="Utils\PKInfo.cs" />
@@ -229,6 +238,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201610200014335_Initial.resx">
       <DependentUpon>201610200014335_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201610220327210_Security.resx">
+      <DependentUpon>201610220327210_Security.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

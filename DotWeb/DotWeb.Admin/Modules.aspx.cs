@@ -17,7 +17,7 @@ namespace DotWeb.Admin
         protected void gridView_Init(object sender, EventArgs e)
         {
             var gridView = (sender as ASPxGridView);
-            gridView.ForceDataRowType(typeof(Group));
+            gridView.ForceDataRowType(typeof(ModuleGroup));
         }
 
         protected void gridView_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)

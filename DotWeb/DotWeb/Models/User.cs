@@ -5,13 +5,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotWeb.Models
+namespace DotWeb
 {
-    public class User
+    public class User : PrincipalBase
     {
-        public Guid Id { get; set; }
+        public User()
+        {
+            UserGroups = new List<UserGroup>();
+        }
+
+        [Required, MaxLength(50)]
+        public string Username { get; set; }
+
+        [Required, MaxLength(50)]
+        public string FirstName { get; set; }
 
         [MaxLength(50)]
-        public string Username { get; set; }
+        public string LastName { get; set; }
+
+        [Required, MaxLength(100)]
+        public string EmailAddress { get; set; }
+
+        public ICollection<UserGroup> UserGroups { get; set; }
     }
 }

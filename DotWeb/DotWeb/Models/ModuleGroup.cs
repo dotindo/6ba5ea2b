@@ -8,12 +8,12 @@ namespace DotWeb
     /// first for navigation, second for security. For navigation, left menu items are grouped based on
     /// their functionalities. For security, we can grant or restrict access on group basis.
     /// </summary>
-    public class Group
+    public class ModuleGroup
     {
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public Group()
+        public ModuleGroup()
         {
             Modules = new List<Module>();
             ShowInLeftMenu = true;

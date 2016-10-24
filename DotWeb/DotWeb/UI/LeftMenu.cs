@@ -14,7 +14,7 @@ namespace DotWeb.UI
     public class LeftMenu : ASPxNavBar
     {
         /// <summary>
-        /// Renders left menu based on <see cref="Group"/> and <see cref="Module"/> stored in admin database.
+        /// Renders left menu based on <see cref="ModuleGroup"/> and <see cref="Module"/> stored in admin database.
         /// </summary>
         /// <param name="e"></param>
         protected override void OnLoad(EventArgs e)
@@ -25,7 +25,7 @@ namespace DotWeb.UI
                 throw new ArgumentException("appId must be specified in configuration file.");
             int appId = int.Parse(ConfigurationManager.AppSettings["appId"]);
             var dotWebDb = new DotWebDb();
-            var groups = dotWebDb.Groups
+            var groups = dotWebDb.ModuleGroups
                 .Include(g => g.App)
                 .Include(g => g.Modules)
                 .Where(g => g.App.Id == appId && g.ShowInLeftMenu == true)
