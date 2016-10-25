@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Web.Security;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
 
 namespace DotWeb_Samples {
     public partial class Register : System.Web.UI.Page {
@@ -30,6 +31,10 @@ namespace DotWeb_Samples {
 
                 if (result.Succeeded)
                 {
+                    var authenticationManager = HttpContext.Current.GetOwinContext().Authentication;
+                    
+                    var userIdentity = manager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+                    authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
                     Response.Redirect(Request.QueryString["ReturnUrl"] ?? "~/Account/RegisterSuccess.aspx");
                 }
                 else

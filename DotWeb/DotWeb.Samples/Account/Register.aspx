@@ -5,7 +5,6 @@
     <h2>
         Create a New Account</h2>
     <p>Use the form below to create a new account.</p>
-    <p>Passwords are required to be a minimum of <%= Membership.MinRequiredPasswordLength %> characters in length.</p>
 </div>
     <dx:ASPxLabel ID="lblUserName" runat="server" AssociatedControlID="tbUserName" Text="User Name:" />
     <div class="form-field">
