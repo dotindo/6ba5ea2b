@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DotWeb
 {
-    public class UserGroup : PrincipalBase
+    public class UserGroup
     {
-        public UserGroup()
-        {
-            Users = new List<User>();
-        }
+        [Key, MaxLength(128)]
+        public string Code { get; set; }
 
+        [Required, MaxLength(50)]
         public string Name { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public string Description { get; set; }
+
+        public int? AppId { get; set; }
+
+        public virtual App App { get; set; }
     }
 }

@@ -179,6 +179,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\AccountBasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Account\ApplicationSignInManager.cs" />
     <Compile Include="Account\ApplicationUserManager.cs" />
     <Compile Include="Account\ChangePassword.aspx.cs">
@@ -264,7 +267,6 @@
     </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\DotWeb\DotWeb.csproj">
       <Project>{8cf552aa-80c6-4018-8be9-cd1c4a862c6a}</Project>

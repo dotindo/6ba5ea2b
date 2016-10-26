@@ -1,5 +1,6 @@
 using DotWeb;
 using System;
+using System.Web;
 using System.Web.Routing;
 
 namespace DotWeb_Samples {
@@ -43,6 +44,8 @@ namespace DotWeb_Samples {
 
         void Session_Start(object sender, EventArgs e) {
             // Code that runs when a new session is started
+            if (HttpContext.Current.User.Identity.IsAuthenticated)
+                Response.Redirect("~/Account/Login.aspx");
         }
 
         void Session_End(object sender, EventArgs e) {

@@ -1,4 +1,5 @@
-﻿using DotWeb.Services;
+﻿using DotWeb;
+using DotWeb.Services;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace DotWeb.Samples.Account
+namespace DotWeb_Samples
 {
     public class ApplicationUserManager: UserManager<ApplicationUser>
     {
@@ -30,7 +31,7 @@ namespace DotWeb.Samples.Account
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
+                RequiredLength = 5,
                 RequireNonLetterOrDigit = false,
                 RequireDigit = false,
                 RequireLowercase = false,

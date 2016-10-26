@@ -70,9 +70,9 @@
     <Compile Include="Migrations\201610200014335_Initial.Designer.cs">
       <DependentUpon>201610200014335_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201610220327210_Security.cs" />
-    <Compile Include="Migrations\201610220327210_Security.Designer.cs">
-      <DependentUpon>201610220327210_Security.cs</DependentUpon>
+    <Compile Include="Migrations\201610260306547_Security.cs" />
+    <Compile Include="Migrations\201610260306547_Security.Designer.cs">
+      <DependentUpon>201610260306547_Security.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\App.cs" />
@@ -82,10 +82,9 @@
     <Compile Include="Dynamic\SchemaInfo.cs" />
     <Compile Include="Models\IdentityDb.cs" />
     <Compile Include="Models\Permission.cs" />
-    <Compile Include="Models\PermissionLevel.cs" />
-    <Compile Include="Models\PrincipalBase.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\UserGroup.cs" />
+    <Compile Include="Models\UserGroupMembers.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\SmsService.cs" />
     <Compile Include="UI\EditPage.cs">
@@ -246,13 +245,14 @@
   <ItemGroup>
     <Content Include="lib\readme.txt" />
     <Content Include="readme.txt" />
+    <EmbeddedResource Include="Migrations\201610260306547_Security.resx">
+      <DependentUpon>201610260306547_Security.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_data\init-data-security.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201610200014335_Initial.resx">
       <DependentUpon>201610200014335_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201610220327210_Security.resx">
-      <DependentUpon>201610220327210_Security.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

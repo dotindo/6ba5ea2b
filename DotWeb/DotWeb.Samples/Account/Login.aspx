@@ -24,6 +24,9 @@
         </ValidationSettings>
     </dx:ASPxTextBox>
 </div>
+<div id="divError" runat="server" Class="form-field hidden">
+    <dx:ASPxLabel ID="lblError" runat="server" CssClass="errorText"></dx:ASPxLabel>
+</div>
 <dx:ASPxButton ID="btnLogin" runat="server" Text="Log In" ValidationGroup="LoginUserValidationGroup"
     OnClick="btnLogin_Click">
 </dx:ASPxButton>

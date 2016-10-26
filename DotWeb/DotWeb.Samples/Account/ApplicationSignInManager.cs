@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using DotWeb;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using System;
@@ -8,7 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace DotWeb.Samples.Account
+namespace DotWeb_Samples
 {
     public class ApplicationSignInManager: SignInManager<ApplicationUser, string>
     {

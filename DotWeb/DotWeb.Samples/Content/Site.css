@@ -815,3 +815,15 @@
 .mainContent {
     margin: 10px;
 }
+
+.hidden {
+    display: none;
+}
+
+.visible-block {
+    display: block;
+}
+
+.errorText {
+    color: red;
+}

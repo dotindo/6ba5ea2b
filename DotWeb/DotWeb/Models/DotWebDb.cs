@@ -20,9 +20,7 @@ namespace DotWeb
 
         public DbSet<Permission> Permissions { get; set; }
 
-        public DbSet<PermissionLevel> PermissionLevels { get; set; }
-
-        public DbSet<User> Users { get; set; }
+        public DbSet<Role> PermissionLevels { get; set; }
 
         public DbSet<UserGroup> UserGroups { get; set; }
 
@@ -47,32 +45,11 @@ namespace DotWeb
             modelBuilder.Entity<Module>()
                 .HasRequired(x => x.Group).WithMany(g => g.Modules).HasForeignKey(f => f.GroupId);
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.UserGroups).WithMany(ug => ug.Users).Map(
-                    m => {
-                        m.MapLeftKey("UserGroupId");
-                        m.MapRightKey("UserId");
-                        m.ToTable("UserGroupMembers");
-                    }
-                );
+            modelBuilder.Entity<Role>().HasRequired(p => p.App).WithMany().HasForeignKey(p => p.AppId).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<PermissionLevel>().HasRequired(p => p.App).WithMany().HasForeignKey(p => p.AppId).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Permission>().HasRequired(p => p.Role).WithMany(r => r.Permissions).HasForeignKey(p => p.RoleId);
 
-            modelBuilder.Entity<PrincipalBase>().ToTable("Principals").HasRequired(p => p.App).WithMany().HasForeignKey(p => p.AppId).WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<AccessRight>().HasRequired(r => r.Principal).WithMany().HasForeignKey(r => r.PrincipalId).WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<AccessRight>().HasRequired(r => r.PermissionLevel).WithMany().HasForeignKey(r => r.PermissionLevelId).WillCascadeOnDelete(false);
-
-            //modelBuilder.Entity<PrincipalBase>()
-            //    .HasMany(p => p.PermissionLevels).WithMany(l => l.Principals).Map(
-            //        m => {
-            //            m.MapLeftKey("PermissionLevelId");
-            //            m.MapRightKey("PrincipalId");
-            //            m.ToTable("PrincipalLevels");
-            //        }
-            //    );
-
+            modelBuilder.Entity<AccessRight>().HasRequired(p => p.Role).WithMany().HasForeignKey(r => r.RoleId).WillCascadeOnDelete(false);
         }
     }
 }

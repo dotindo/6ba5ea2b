@@ -8,57 +8,37 @@ using System.Web.Security;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using DotWeb;
 
 namespace DotWeb_Samples {
-    public partial class Register : System.Web.UI.Page {
-        protected void Page_Load(object sender, EventArgs e) {
-            
+    public partial class Register : AccountBasePage
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
         }
 
         protected void btnCreateUser_Click(object sender, EventArgs e)
         {
             try 
             {
-                //MembershipUser user = Membership.CreateUser(tbUserName.Text, tbPassword.Text, tbEmail.Text);
-                //Response.Redirect(Request.QueryString["ReturnUrl"] ?? "~/Account/RegisterSuccess.aspx");
-
-                // Default UserStore constructor uses the default connection string named: DefaultConnection
-                var userStore = new UserStore<IdentityUser>();
-                var manager = new UserManager<IdentityUser>(userStore);
-
-                var user = new IdentityUser() { UserName = tbUserName.Text, Email = tbEmail.Text };
-                IdentityResult result = manager.Create(user, tbPassword.Text);
+                var appUser = new ApplicationUser { UserName = tbUserName.Text, FirstName = tbFirstName.Text, LastName = tbLastName.Text, Email = tbEmail.Text };
+                var result = UserManager.Create(appUser, tbPassword.Text);
 
                 if (result.Succeeded)
                 {
-                    var authenticationManager = HttpContext.Current.GetOwinContext().Authentication;
-                    
-                    var userIdentity = manager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
-                    authenticationManager.SignIn(new AuthenticationProperties() { }, userIdentity);
                     Response.Redirect(Request.QueryString["ReturnUrl"] ?? "~/Account/RegisterSuccess.aspx");
                 }
                 else
                 {
-                    
+                    lblError.Text = "";
+                    foreach (var error in result.Errors)
+                        lblError.Text += error;
+                    divError.Attributes["class"] = "form-field visible";
                 }
             }
-            catch (MembershipCreateUserException exc)
+            catch (Exception ex)
             {
-                if (exc.StatusCode == MembershipCreateStatus.DuplicateEmail || exc.StatusCode == MembershipCreateStatus.InvalidEmail)
-                {
-                    tbEmail.ErrorText = exc.Message;
-                    tbEmail.IsValid = false;
-                }
-                else if (exc.StatusCode == MembershipCreateStatus.InvalidPassword)
-                {
-                    tbPassword.ErrorText = exc.Message;
-                    tbPassword.IsValid = false;
-                }
-                else
-                {
-                    tbUserName.ErrorText = exc.Message;
-                    tbUserName.IsValid = false;
-                }
+                lblError.Text = ex.Message;
             }
         }
     }

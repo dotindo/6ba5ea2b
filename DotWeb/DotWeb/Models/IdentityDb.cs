@@ -24,7 +24,12 @@ namespace DotWeb
             modelBuilder.Entity<IdentityUserClaim>().ToTable("IdentityUserClaim");
             modelBuilder.Entity<IdentityUserLogin>().ToTable("IdentityUserLogin");
             modelBuilder.Entity<IdentityUserRole>().ToTable("IdentityUserRole");
-
         }
+
+        public static IdentityDb Create()
+        {
+            return new IdentityDb();
+        }
+
     }
 }

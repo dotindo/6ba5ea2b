@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DotWeb
 {
-    public class PermissionLevel
+    public class Role
     {
-        public PermissionLevel()
+        public Role()
         {
             Permissions = new List<Permission>();
         }
@@ -18,6 +18,8 @@ namespace DotWeb
 
         [Required, MaxLength(50)]
         public string Name { get; set; }
+
+        public string Description { get; set; }
 
         public ICollection<Permission> Permissions { get; set; }
 

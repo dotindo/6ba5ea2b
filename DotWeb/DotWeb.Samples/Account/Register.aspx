@@ -23,6 +23,19 @@
             </ValidationSettings>
         </dx:ASPxTextBox>
     </div>
+    <dx:ASPxLabel ID="lblFirstName" runat="server" AssociatedControlID="tbFirstName" Text="First Name:" />
+    <div class="form-field">
+        <dx:ASPxTextBox ID="tbFirstName" runat="server" Width="200px">
+            <ValidationSettings ValidationGroup="RegisterUserValidationGroup">
+                <RequiredField ErrorText="First name is required." IsRequired="true" />
+            </ValidationSettings>
+        </dx:ASPxTextBox>
+    </div>
+    <dx:ASPxLabel ID="lblLastName" runat="server" AssociatedControlID="tbLastName" Text="Last Name:" />
+    <div class="form-field">
+        <dx:ASPxTextBox ID="tbLastName" runat="server" Width="200px">
+        </dx:ASPxTextBox>
+    </div>
     <dx:ASPxLabel ID="lblPassword" runat="server" AssociatedControlID="tbPassword" Text="Password:" />
     <div class="form-field">
         <dx:ASPxTextBox ID="tbPassword" ClientInstanceName="Password" Password="true" runat="server"
@@ -46,6 +59,9 @@
                 e.errorText = 'The Password and Confirmation Password must match.';
             }" />
         </dx:ASPxTextBox>
+    </div>
+    <div id="divError" runat="server" Class="form-field hidden">
+        <dx:ASPxLabel ID="lblError" runat="server" CssClass="errorText"></dx:ASPxLabel>
     </div>
     <dx:ASPxButton ID="btnCreateUser" runat="server" Text="Create User" ValidationGroup="RegisterUserValidationGroup"
         OnClick="btnCreateUser_Click">

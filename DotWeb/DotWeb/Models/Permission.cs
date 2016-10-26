@@ -8,11 +8,12 @@ namespace DotWeb
 {
     public enum PermissionType
     {
-        Read,
-        Insert,
-        Update,
-        Delete,
-        Print
+        Read = 1,
+        Insert = 2,
+        Update = 3,
+        Delete = 4,
+        Print = 5,
+        Admin = 6
     }
 
     public class Permission
@@ -21,8 +22,8 @@ namespace DotWeb
 
         public PermissionType PermissionType { get; set; }
 
-        public long PermissionLevelId { get; set; }
+        public int RoleId { get; set; }
 
-        public virtual PermissionLevel PermissionLevel { get; set; }
+        public virtual Role Role { get; set; }
     }
 }
