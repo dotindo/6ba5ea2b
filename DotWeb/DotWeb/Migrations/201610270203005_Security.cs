@@ -49,15 +49,26 @@ namespace DotWeb.Migrations
                 .Index(t => t.RoleId);
             
             CreateTable(
+                "dbo.UserGroupMembers",
+                c => new
+                    {
+                        UserId = c.String(nullable: false, maxLength: 128),
+                        GroupId = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => new { t.UserId, t.GroupId })
+                .ForeignKey("dbo.UserGroups", t => t.GroupId)
+                .Index(t => t.GroupId);
+            
+            CreateTable(
                 "dbo.UserGroups",
                 c => new
                     {
-                        Code = c.String(nullable: false, maxLength: 128),
+                        Id = c.String(nullable: false, maxLength: 128),
                         Name = c.String(nullable: false, maxLength: 50),
                         Description = c.String(),
                         AppId = c.Int(),
                     })
-                .PrimaryKey(t => t.Code)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Apps", t => t.AppId)
                 .Index(t => t.AppId);
             
@@ -65,15 +76,18 @@ namespace DotWeb.Migrations
         
         public override void Down()
         {
+            DropForeignKey("dbo.UserGroupMembers", "GroupId", "dbo.UserGroups");
             DropForeignKey("dbo.UserGroups", "AppId", "dbo.Apps");
             DropForeignKey("dbo.AccessRights", "RoleId", "dbo.Roles");
             DropForeignKey("dbo.Permissions", "RoleId", "dbo.Roles");
             DropForeignKey("dbo.Roles", "AppId", "dbo.Apps");
             DropIndex("dbo.UserGroups", new[] { "AppId" });
+            DropIndex("dbo.UserGroupMembers", new[] { "GroupId" });
             DropIndex("dbo.Permissions", new[] { "RoleId" });
             DropIndex("dbo.Roles", new[] { "AppId" });
             DropIndex("dbo.AccessRights", new[] { "RoleId" });
             DropTable("dbo.UserGroups");
+            DropTable("dbo.UserGroupMembers");
             DropTable("dbo.Permissions");
             DropTable("dbo.Roles");
             DropTable("dbo.AccessRights");

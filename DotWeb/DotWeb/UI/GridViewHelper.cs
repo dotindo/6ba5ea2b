@@ -15,13 +15,19 @@ namespace DotWeb.UI
         /// Create <see cref="GridViewCommandColumn"/> instance containing Edit and Delete buttons. The New button
         /// is located on the header only, not on every row.
         /// </summary>
+        /// <param name="allowNew"></param>
+        /// <param name="allowEdit"></param>
+        /// <param name="allowDelete"></param>
         /// <returns>An instance of <see cref="GridViewCommandColumn"/></returns>
-        internal static GridViewCommandColumn AddGridViewCommandColumns()
+        internal static GridViewCommandColumn AddGridViewCommandColumns(bool allowNew, bool allowEdit, bool allowDelete)
         {
             var commandColumn = new GridViewCommandColumn();
-            commandColumn.ShowEditButton = true;
-            commandColumn.ShowDeleteButton = true;
-            commandColumn.ShowNewButtonInHeader = true;
+            if (allowEdit)
+                commandColumn.ShowEditButton = true;
+            if (allowDelete)
+                commandColumn.ShowDeleteButton = true;
+            if (allowNew)
+                commandColumn.ShowNewButtonInHeader = true;
 
             return commandColumn;
         }

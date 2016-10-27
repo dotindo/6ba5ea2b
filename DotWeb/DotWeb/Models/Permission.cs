@@ -8,12 +8,13 @@ namespace DotWeb
 {
     public enum PermissionType
     {
+        NoAccess = 0,
         Read = 1,
         Insert = 2,
         Update = 3,
         Delete = 4,
         Print = 5,
-        Admin = 6
+        Admin = 9
     }
 
     public class Permission

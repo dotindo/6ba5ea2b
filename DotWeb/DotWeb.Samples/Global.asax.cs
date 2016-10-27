@@ -1,10 +1,24 @@
 using DotWeb;
+using DotWeb.Utils;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Web;
 using System.Web.Routing;
 
 namespace DotWeb_Samples {
-    public class Global_asax : System.Web.HttpApplication {
+    public class Global_asax : System.Web.HttpApplication
+    {
+        protected UserManager<ApplicationUser> userManager;
+        public virtual UserManager<ApplicationUser> UserManager
+        {
+            get { return userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            protected set { userManager = value; }
+        }
+
         void Application_Start(object sender, EventArgs e)
         {
             DevExpress.Web.ASPxWebControl.CallbackError += new EventHandler(Application_Error);
@@ -42,10 +56,34 @@ namespace DotWeb_Samples {
             // Code that runs when an unhandled error occurs
         }
 
-        void Session_Start(object sender, EventArgs e) {
-            // Code that runs when a new session is started
-            if (HttpContext.Current.User.Identity.IsAuthenticated)
-                Response.Redirect("~/Account/Login.aspx");
+        void Application_PostAcquireRequestState(object sender, EventArgs e)
+        {
+            if (!HttpContext.Current.User.Identity.IsAuthenticated || HttpContext.Current.Session == null) return;
+
+            //var user = UserManager.FindByName(HttpContext.Current.User.Identity.Name);
+            var user = HttpContext.Current.Session["applicationUser"] as ApplicationUser;
+            if (user != null)
+            {
+                var sessionName = string.Format("accessRights_{0}_{1}", user.UserName, HttpContext.Current.Request.RawUrl);
+                List<PermissionType> permissions = new List<PermissionType>();
+                if (HttpContext.Current.Session[sessionName] == null)
+                {
+                    permissions = Helper.GetPermissions(user, HttpContext.Current.Request.RawUrl, 2);
+                    HttpContext.Current.Session[sessionName] = permissions;
+                }
+                else
+                    permissions = HttpContext.Current.Session[sessionName] as List<PermissionType>;
+
+                // if no access rights were configured or if there is a "no access" permission, authorization should not be granted
+                if (permissions.Count == 0 || permissions.Contains(PermissionType.NoAccess))
+                    Response.Redirect("~/401.aspx");
+            }
+        }
+
+        void Session_Start(object sender, EventArgs e)
+        {
+            if (HttpContext.Current.Session["applicationUser"] == null)
+                HttpContext.Current.Session["applicationUser"] = UserManager.FindByName(HttpContext.Current.User.Identity.Name);
         }
 
         void Session_End(object sender, EventArgs e) {
@@ -54,5 +92,6 @@ namespace DotWeb_Samples {
             // is set to InProc in the Web.config file. If session mode is set to StateServer 
             // or SQLServer, the event is not raised.
         }
+
     }
 }

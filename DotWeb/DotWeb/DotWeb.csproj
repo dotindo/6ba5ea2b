@@ -70,9 +70,9 @@
     <Compile Include="Migrations\201610200014335_Initial.Designer.cs">
       <DependentUpon>201610200014335_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201610260306547_Security.cs" />
-    <Compile Include="Migrations\201610260306547_Security.Designer.cs">
-      <DependentUpon>201610260306547_Security.cs</DependentUpon>
+    <Compile Include="Migrations\201610270203005_Security.cs" />
+    <Compile Include="Migrations\201610270203005_Security.Designer.cs">
+      <DependentUpon>201610270203005_Security.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\App.cs" />
@@ -245,8 +245,8 @@
   <ItemGroup>
     <Content Include="lib\readme.txt" />
     <Content Include="readme.txt" />
-    <EmbeddedResource Include="Migrations\201610260306547_Security.resx">
-      <DependentUpon>201610260306547_Security.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201610270203005_Security.resx">
+      <DependentUpon>201610270203005_Security.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_data\init-data-security.sql" />
   </ItemGroup>

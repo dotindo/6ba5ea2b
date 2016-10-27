@@ -24,6 +24,8 @@ namespace DotWeb
 
         public DbSet<UserGroup> UserGroups { get; set; }
 
+        public DbSet<UserGroupMembers> UserGroupMembers { get; set; }
+
         public DbSet<AccessRight> AccessRights { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -48,6 +50,8 @@ namespace DotWeb
             modelBuilder.Entity<Role>().HasRequired(p => p.App).WithMany().HasForeignKey(p => p.AppId).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Permission>().HasRequired(p => p.Role).WithMany(r => r.Permissions).HasForeignKey(p => p.RoleId);
+
+            modelBuilder.Entity<UserGroupMembers>().HasRequired(m => m.Group).WithMany().HasForeignKey(m => m.GroupId).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AccessRight>().HasRequired(p => p.Role).WithMany().HasForeignKey(r => r.RoleId).WillCascadeOnDelete(false);
         }

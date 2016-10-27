@@ -2,6 +2,7 @@
 using DevExpress.Web.Data;
 using DotWeb.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 
@@ -20,6 +21,7 @@ namespace DotWeb.UI
         private TableMeta masterTableMeta;
         private string connectionString;
         private ColumnMeta foreignKey;
+        private List<PermissionType> permissions;
 
         /// <summary>
         /// Parameterized-constructor for <see cref="DetailGridCreator"/>.
@@ -29,7 +31,9 @@ namespace DotWeb.UI
         /// <param name="masterTableMeta">Master table meta data, an instance of <see cref="TableMeta"/>.</param>
         /// <param name="masterKey">The primary key of master table.</param>
         /// <param name="connectionString">Connection string to underlying database.</param>
-        public DetailGridCreator(TableMetaRelation detailTable, TableMeta masterTableMeta, object masterKey, string connectionString)
+        /// <param name="permissions"></param>
+        public DetailGridCreator(TableMetaRelation detailTable, TableMeta masterTableMeta, object masterKey, string connectionString,
+            List<PermissionType> permissions)
         {
             this.detailTableMeta = detailTable.Child;
             this.masterTableMeta = masterTableMeta;
@@ -40,6 +44,7 @@ namespace DotWeb.UI
                 .SingleOrDefault();
             if (foreignKey == null)
                 throw new ArgumentException(string.Format("FK to table {0} not found", masterTableMeta.Name));
+            this.permissions = permissions;
         }
 
         /// <summary>
@@ -61,7 +66,9 @@ namespace DotWeb.UI
             detailGrid.Settings.ShowGroupPanel = true;
             detailGrid.AutoGenerateColumns = false;
             detailGrid.SettingsBehavior.ConfirmDelete = true;
-            detailGrid.Columns.Add(GridViewHelper.AddGridViewCommandColumns());
+            detailGrid.Columns.Add(GridViewHelper.AddGridViewCommandColumns(
+                permissions.Contains(PermissionType.Insert), permissions.Contains(PermissionType.Update), permissions.Contains(PermissionType.Delete)
+                ));
             foreach (var column in detailTableMeta.Columns.OrderBy(c => c.OrderNo))
             {
                 if (!column.DisplayInGrid || column.Name == foreignKey.Name)
@@ -79,13 +86,13 @@ namespace DotWeb.UI
             if (detailTableMeta.Children.Where(c => c.IsRendered).Count() == 1)
             {
                 detailGrid.SettingsDetail.ShowDetailRow = true;
-                detailGrid.Templates.DetailRow = new DetailGridTemplate(detailTableMeta, connectionString);
+                detailGrid.Templates.DetailRow = new DetailGridTemplate(detailTableMeta, connectionString, permissions);
             }
             // Master-multiple details scenario
             else if (detailTableMeta.Children.Where(c => c.IsRendered).Count() > 1)
             {
                 detailGrid.SettingsDetail.ShowDetailRow = true;
-                detailGrid.Templates.DetailRow = new MultipleDetailGridTemplate(detailTableMeta, connectionString);
+                detailGrid.Templates.DetailRow = new MultipleDetailGridTemplate(detailTableMeta, connectionString, permissions);
             }
 
             detailGrid.DataBind();

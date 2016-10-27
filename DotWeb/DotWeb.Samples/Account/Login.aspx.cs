@@ -30,8 +30,8 @@ namespace DotWeb_Samples {
 
         protected void btnLogin_Click(object sender, EventArgs e) {
             // Require the user to have a confirmed email before they can log on.
-            var userTask = UserManager.FindByNameAsync(tbUserName.Text);
-            if (userTask.Result == null)
+            var user = UserManager.FindByName(tbUserName.Text);
+            if (user == null)
             {
                 lblError.Text = "User not found!";
                 divError.Attributes["class"] = "form-field visible";
@@ -39,11 +39,11 @@ namespace DotWeb_Samples {
             else
             {
                 // To enable password failures to trigger account lockout, change to shouldLockout: true
-                var signInTask = SignInManager.PasswordSignInAsync(tbUserName.Text, tbPassword.Text, isPersistent: false, shouldLockout: false);
-                switch (signInTask.Result)
+                var signIn = SignInManager.PasswordSignIn(tbUserName.Text, tbPassword.Text, isPersistent: false, shouldLockout: false);
+                switch (signIn)
                 {
                     case SignInStatus.Success:
-                        Session["user"] = userTask.Result;
+                        HttpContext.Current.Session["applicationUser"] = user;
                         Response.Redirect("~/");
                         break;
                     case SignInStatus.LockedOut:

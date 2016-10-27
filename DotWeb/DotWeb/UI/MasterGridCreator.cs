@@ -1,6 +1,7 @@
 ﻿using DevExpress.Web;
 using DotWeb.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 
@@ -16,16 +17,19 @@ namespace DotWeb.UI
     {
         private TableMeta tableMeta;
         private string connectionString;
+        List<PermissionType> permissions;
 
         /// <summary>
         /// Custom constructor accepting an instance of <see cref="TableMeta"/> and connection string.
         /// </summary>
         /// <param name="tableMeta">An instance of <see cref="TableMeta"/>.</param>
         /// <param name="connectionString">String, a connection string to the database being rendered.</param>
-        public MasterGridCreator(TableMeta tableMeta, string connectionString)
+        /// <param name="permissions"></param>
+        public MasterGridCreator(TableMeta tableMeta, string connectionString, List<PermissionType> permissions)
         {
             this.tableMeta = tableMeta;
             this.connectionString = connectionString;
+            this.permissions = permissions;
         }
 
         /// <summary>
@@ -46,7 +50,9 @@ namespace DotWeb.UI
             masterGrid.Settings.ShowGroupPanel = true;
             masterGrid.AutoGenerateColumns = false;
             masterGrid.SettingsBehavior.ConfirmDelete = true;
-            masterGrid.Columns.Add(GridViewHelper.AddGridViewCommandColumns());
+            masterGrid.Columns.Add(GridViewHelper.AddGridViewCommandColumns(
+                permissions.Contains(PermissionType.Insert), permissions.Contains(PermissionType.Update), permissions.Contains(PermissionType.Delete)
+            ));
             masterGrid.CustomColumnDisplayText += masterGrid_CustomColumnDisplayText;
             masterGrid.CellEditorInitialize += masterGrid_CellEditorInitialize;
 
@@ -67,13 +73,13 @@ namespace DotWeb.UI
             if (tableMeta.Children.Where(c => c.IsRendered).Count() == 1)
             {
                 masterGrid.SettingsDetail.ShowDetailRow = true;
-                masterGrid.Templates.DetailRow = new DetailGridTemplate(tableMeta, connectionString);
+                masterGrid.Templates.DetailRow = new DetailGridTemplate(tableMeta, connectionString, permissions);
             }
             // Master-multiple details scenario
             else if (tableMeta.Children.Where(c => c.IsRendered).Count() > 1)
             {
                 masterGrid.SettingsDetail.ShowDetailRow = true;
-                masterGrid.Templates.DetailRow = new MultipleDetailGridTemplate(tableMeta, connectionString);
+                masterGrid.Templates.DetailRow = new MultipleDetailGridTemplate(tableMeta, connectionString, permissions);
             }
 
             return masterGrid;
