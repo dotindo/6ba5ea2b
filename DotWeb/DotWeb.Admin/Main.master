@@ -24,7 +24,10 @@
                 <ContentCollection>
                     <dx:SplitterContentControl>
                         <div class="leftPanel">
-                            <dw:LeftMenu ID="LeftMenu" runat="server" AutoCollapse="True" EnableAnimation="True" Width="100%"></dw:LeftMenu>
+                            <dx:ASPxNavBar ID="LeftNav" runat="server" AutoCollapse="True" EnableAnimation="True" Width="100%" DataSourceID="XmlDataSourceLeft">
+                                <Border BorderWidth="0px" />
+                                <Paddings Padding="0px" />
+                            </dx:ASPxNavBar>
                         </div>
                     </dx:SplitterContentControl>
                 </ContentCollection>
@@ -46,4 +49,5 @@
             </dx:SplitterPane>
         </Panes>
     </dx:ASPxSplitter>
+    <asp:XmlDataSource ID="XmlDataSourceLeft" runat="server" DataFile="~/App_Data/SideMenu.xml" XPath="/menu/*"></asp:XmlDataSource>
 </asp:Content>

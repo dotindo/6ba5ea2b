@@ -20,7 +20,7 @@ namespace DotWeb
 
         public DbSet<Permission> Permissions { get; set; }
 
-        public DbSet<Role> PermissionLevels { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public DbSet<UserGroup> UserGroups { get; set; }
 

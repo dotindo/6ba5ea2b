@@ -20,6 +20,21 @@ namespace DotWeb.Admin
             GridViewHelper.gridView_CustomColumnDisplayText(sender, e, schemaInfo.App.GridTextColumnMaxLength);
         }
 
+        protected void appFilterComboBox_DataBound(object sender, EventArgs e)
+        {
+            if (Session["AppId"] != null)
+            {
+                foreach (ListEditItem item in appFilterComboBox.Items)
+                {
+                    if (item.Value.ToString() == Session["AppId"].ToString())
+                    {
+                        appFilterComboBox.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
+        }
+
         protected void gridView_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
             if ((string)Session["AppId"] == e.Parameters) return;
@@ -35,21 +50,6 @@ namespace DotWeb.Admin
         protected void gridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
             e.NewValues["AppId"] = Session["AppId"].ToString();
-        }
-
-        protected void appFilterComboBox_DataBound(object sender, EventArgs e)
-        {
-            if (Session["AppId"] != null)
-            {
-                foreach (ListEditItem item in appFilterComboBox.Items)
-                {
-                    if (item.Value.ToString() == Session["AppId"].ToString())
-                    {
-                        appFilterComboBox.SelectedItem = item;
-                        break;
-                    }
-                }
-            }
         }
 
         protected void columnsGridView_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)

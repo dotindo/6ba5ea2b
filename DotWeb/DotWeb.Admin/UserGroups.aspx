@@ -1,5 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.master" AutoEventWireup="true" CodeBehind="Roles.aspx.cs" Inherits="DotWeb.Admin.Roles" %>
-<asp:Content ID="pageTitle" ContentPlaceHolderID="PageTitle" runat="server">Roles</asp:Content>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.master" AutoEventWireup="true" CodeBehind="UserGroups.aspx.cs" Inherits="DotWeb.Admin.UserGroups" %>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="PageTitle" runat="server">Page Title</asp:Content>
 <asp:Content ID="content" ContentPlaceHolderID="MainContent" runat="server">
         <dx:ASPxFormLayout ID="filterLayout" runat="server" CssClass="filterFormLayout">
         <Items>
@@ -21,7 +21,7 @@
         </Items>
     </dx:ASPxFormLayout>
 
-	<dx:ASPxGridView ID="gridView" runat="server" AutoGenerateColumns="false" DataSourceID="rolesDataSource" ClientInstanceName="gridView"
+	<dx:ASPxGridView ID="gridView" runat="server" AutoGenerateColumns="false" DataSourceID="userGroupsDataSource" ClientInstanceName="gridView"
 		KeyFieldName="Id" CssClass="gridView" OnInit="gridView_Init" OnCustomCallback="gridView_CustomCallback"
         OnRowUpdating="gridView_RowUpdating" OnCellEditorInitialize="gridView_CellEditorInitialize">
 		<Columns>
@@ -44,20 +44,15 @@
                 <div style="padding: 3px">
                     <dx:ASPxPageControl ID="pageControl" runat="server" Width="100%" EnableCallBacks="true">
                         <TabPages>
-                            <dx:TabPage Text="Permissions" Visible="true">
+                            <dx:TabPage Text="Members" Visible="true">
                                 <ContentCollection>
                                     <dx:ContentControl runat="server">
-                                        <dx:ASPxGridView ID="permissionsGridView" runat="server" AutoGenerateColumns="false" DataSourceID="permissionsDataSource" 
-                                            ClientInstanceName="permissionsGridView" KeyFieldName="Id" CssClass="gridView" OnCellEditorInitialize="permissionsGridView_CellEditorInitialize"
-                                            OnBeforePerformDataSelect="permissionsGridView_BeforePerformDataSelect" OnRowUpdating="permissionsGridView_RowUpdating">
+                                        <dx:ASPxGridView ID="membersGridView" runat="server" AutoGenerateColumns="false" DataSourceID="membersDataSource" 
+                                            ClientInstanceName="membersGridView" KeyFieldName="UserId;GroupId" CssClass="gridView" OnCellEditorInitialize="membersGridView_CellEditorInitialize"
+                                            OnBeforePerformDataSelect="membersGridView_BeforePerformDataSelect" OnRowUpdating="membersGridView_RowUpdating">
                                             <Columns>
 			                                    <dx:GridViewCommandColumn ShowDeleteButton="true" ShowEditButton="false" ShowNewButtonInHeader="true" VisibleIndex="0"></dx:GridViewCommandColumn>
-                                                <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" Visible="false">
-                                                    <PropertiesTextEdit>
-                                                        <ValidationSettings RequiredField-IsRequired="true" />
-                                                    </PropertiesTextEdit>
-                                                </dx:GridViewDataTextColumn>
-                                                <dx:GridViewDataTextColumn FieldName="PermissionType" Caption="Permission">
+                                                <dx:GridViewDataTextColumn FieldName="UserId" Caption="User Id">
                                                     <PropertiesTextEdit>
                                                         <ValidationSettings RequiredField-IsRequired="true" />
                                                     </PropertiesTextEdit>
@@ -86,19 +81,18 @@
 		<BorderBottom BorderWidth="1px" />
 	</dx:ASPxGridView>
 
-    <ef:EntityDataSource ID="rolesDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Roles"
+    <ef:EntityDataSource ID="userGroupsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="UserGroups"
         EnableInsert="true" EnableUpdate="true" EnableDelete="true" AutoGenerateWhereClause="true" OrderBy="it.Name">
         <WhereParameters>
             <asp:SessionParameter Name="AppId" SessionField="AppId" DefaultValue="0" DbType="Int32" />
         </WhereParameters>
     </ef:EntityDataSource>
-    <ef:EntityDataSource ID="permissionsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Permissions"
-        EnableInsert="false" EnableUpdate="true" EnableDelete="true" AutoGenerateWhereClause="true" OrderBy="it.PermissionType">
+    <ef:EntityDataSource ID="membersDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="UserGroupMembers"
+        EnableInsert="false" EnableUpdate="true" EnableDelete="true" Where="it.GroupId = @GroupId" OrderBy="it.UserId">
         <WhereParameters>
-            <asp:SessionParameter Name="RoleId" SessionField="RoleId" Type="Int32" />
+            <asp:SessionParameter Name="GroupId" SessionField="GroupId" Type="String" />
         </WhereParameters>
     </ef:EntityDataSource>
 
     <ef:EntityDataSource ID="appsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Apps" />
-
 </asp:Content>

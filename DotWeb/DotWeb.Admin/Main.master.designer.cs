@@ -31,13 +31,13 @@ namespace DotWeb_Admin {
         protected global::DevExpress.Web.ASPxSplitter ContentSplitter;
         
         /// <summary>
-        /// LeftMenu control.
+        /// LeftNav control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DotWeb.UI.LeftMenu LeftMenu;
+        protected global::DevExpress.Web.ASPxNavBar LeftNav;
         
         /// <summary>
         /// MainContent control.
@@ -47,5 +47,14 @@ namespace DotWeb_Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        
+        /// <summary>
+        /// XmlDataSourceLeft control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.XmlDataSource XmlDataSourceLeft;
     }
 }

@@ -10,7 +10,7 @@
 namespace DotWeb.Admin {
     
     
-    public partial class Roles {
+    public partial class UserGroups {
         
         /// <summary>
         /// filterLayout control.
@@ -40,22 +40,22 @@ namespace DotWeb.Admin {
         protected global::DevExpress.Web.ASPxGridView gridView;
         
         /// <summary>
-        /// rolesDataSource control.
+        /// userGroupsDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource rolesDataSource;
+        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource userGroupsDataSource;
         
         /// <summary>
-        /// permissionsDataSource control.
+        /// membersDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource permissionsDataSource;
+        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource membersDataSource;
         
         /// <summary>
         /// appsDataSource control.

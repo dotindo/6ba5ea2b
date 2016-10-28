@@ -147,6 +147,7 @@
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterSuccess.aspx" />
     <Content Include="Apps.aspx" />
+    <Content Include="App_Data\SideMenu.xml" />
     <Content Include="App_Data\TopMenu.xml" />
     <Content Include="Content\Images\AquaHeader.jpg" />
     <Content Include="Content\Images\BlackGlassHeader.jpg" />
@@ -175,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tables.aspx" />
+    <Content Include="UserGroups.aspx" />
     <Content Include="Users.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -315,6 +317,13 @@
     </Compile>
     <Compile Include="Tables.aspx.designer.cs">
       <DependentUpon>Tables.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserGroups.aspx.cs">
+      <DependentUpon>UserGroups.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserGroups.aspx.designer.cs">
+      <DependentUpon>UserGroups.aspx</DependentUpon>
     </Compile>
     <Compile Include="Users.aspx.cs">
       <DependentUpon>Users.aspx</DependentUpon>

@@ -113,7 +113,7 @@
 		<BorderBottom BorderWidth="1px" />
     </dx:ASPxGridView>
 
-    <ef:EntityDataSource ID="groupsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Groups"
+    <ef:EntityDataSource ID="groupsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="ModuleGroups"
         EnableInsert="true" EnableUpdate="true" EnableDelete="true" AutoGenerateWhereClause="true" OrderBy="it.Name">
         <WhereParameters>
             <asp:SessionParameter Name="AppId" SessionField="AppId" DefaultValue="0" DbType="Int32" />
