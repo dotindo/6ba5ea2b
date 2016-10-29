@@ -23,9 +23,9 @@
 
 	<dx:ASPxGridView ID="gridView" runat="server" AutoGenerateColumns="false" DataSourceID="userGroupsDataSource" ClientInstanceName="gridView"
 		KeyFieldName="Id" CssClass="gridView" OnInit="gridView_Init" OnCustomCallback="gridView_CustomCallback"
-        OnRowUpdating="gridView_RowUpdating" OnCellEditorInitialize="gridView_CellEditorInitialize">
+        OnRowInserting="gridView_RowInserting" OnRowUpdating="gridView_RowUpdating" OnCellEditorInitialize="gridView_CellEditorInitialize" OnCustomErrorText="gridView_CustomErrorText">
 		<Columns>
-			<dx:GridViewCommandColumn ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0"></dx:GridViewCommandColumn>
+			<dx:GridViewCommandColumn ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0"></dx:GridViewCommandColumn>
             <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" Visible="false">
                 <PropertiesTextEdit>
                     <ValidationSettings RequiredField-IsRequired="true" />
@@ -48,15 +48,15 @@
                                 <ContentCollection>
                                     <dx:ContentControl runat="server">
                                         <dx:ASPxGridView ID="membersGridView" runat="server" AutoGenerateColumns="false" DataSourceID="membersDataSource" 
-                                            ClientInstanceName="membersGridView" KeyFieldName="UserId;GroupId" CssClass="gridView" OnCellEditorInitialize="membersGridView_CellEditorInitialize"
-                                            OnBeforePerformDataSelect="membersGridView_BeforePerformDataSelect" OnRowUpdating="membersGridView_RowUpdating">
+                                            ClientInstanceName="membersGridView" KeyFieldName="UserId;GroupId" CssClass="gridView" 
+                                            OnInit="membersGridView_Init" OnCellEditorInitialize="membersGridView_CellEditorInitialize"
+                                            OnBeforePerformDataSelect="membersGridView_BeforePerformDataSelect" OnRowInserting="membersGridView_RowInserting" OnRowUpdating="membersGridView_RowUpdating">
                                             <Columns>
 			                                    <dx:GridViewCommandColumn ShowDeleteButton="true" ShowEditButton="false" ShowNewButtonInHeader="true" VisibleIndex="0"></dx:GridViewCommandColumn>
-                                                <dx:GridViewDataTextColumn FieldName="UserId" Caption="User Id">
-                                                    <PropertiesTextEdit>
-                                                        <ValidationSettings RequiredField-IsRequired="true" />
-                                                    </PropertiesTextEdit>
-                                                </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataComboBoxColumn FieldName="UserId" Caption="User Id">
+                                                    <PropertiesComboBox DataSourceID="usersSqlDataSource" ValueField="Id" TextField="FirstName">
+                                                    </PropertiesComboBox>
+                                                </dx:GridViewDataComboBoxColumn>
                                             </Columns>
 		                                    <Settings ShowGroupPanel="false" />
 		                                    <SettingsPager PageSize="25" />
@@ -88,11 +88,13 @@
         </WhereParameters>
     </ef:EntityDataSource>
     <ef:EntityDataSource ID="membersDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="UserGroupMembers"
-        EnableInsert="false" EnableUpdate="true" EnableDelete="true" Where="it.GroupId = @GroupId" OrderBy="it.UserId">
+        EnableInsert="true" EnableUpdate="true" EnableDelete="true" Where="it.GroupId = @GroupId" OrderBy="it.UserId">
         <WhereParameters>
             <asp:SessionParameter Name="GroupId" SessionField="GroupId" Type="String" />
         </WhereParameters>
     </ef:EntityDataSource>
 
     <ef:EntityDataSource ID="appsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Apps" />
+
+    <asp:SqlDataSource ID="usersSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:DotWebDb %>" SelectCommand="SELECT * FROM dbo.ApplicationUser" />
 </asp:Content>

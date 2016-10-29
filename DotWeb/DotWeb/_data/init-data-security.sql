@@ -10,23 +10,28 @@ INSERT [dbo].[IdentityUser] ([Id], [Email], [EmailConfirmed], [PasswordHash], [S
 	VALUES (N'fe1f953d-0300-4b2f-ac11-d629e96c4739', N'noaccess@test.com', 0, N'AERsXOclYQBZ0uNAEM5Q5wVqTyk40uVgFrzmQUqocZbKh1TV6SKi5kTmQKH5lZFxTQ==', N'b20f5722-6d00-4e37-9980-c0b6bfab9a5f', NULL, 0, 0, NULL, 1, 0, N'noaccess')
 
 
-INSERT [dbo].[ApplicationUser] ([Id], [FirstName], [LastName]) VALUES (N'c42138f3-882b-4eb9-9ca3-1a613ed54ef5', N'Agus', N'Suhanto')
-INSERT [dbo].[ApplicationUser] ([Id], [FirstName], [LastName]) VALUES (N'fa646366-7cc2-4129-86c7-1d486af1a2e8', N'Admin', null)
-INSERT [dbo].[ApplicationUser] ([Id], [FirstName], [LastName]) VALUES (N'570a3e29-fdfe-4129-a7d4-2aa74941de21', N'Editor', null)
-INSERT [dbo].[ApplicationUser] ([Id], [FirstName], [LastName]) VALUES (N'907030bc-46d5-40c0-af39-34bfa7ea1b5b', N'Reader', null)
-INSERT [dbo].[ApplicationUser] ([Id], [FirstName], [LastName]) VALUES (N'fe1f953d-0300-4b2f-ac11-d629e96c4739', N'Noaccess', null)
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'c42138f3-882b-4eb9-9ca3-1a613ed54ef5', 'Agus', N'Suhanto', 'agus', 'agus.suhanto@gmail.com', null, null, null, 'User')
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'fa646366-7cc2-4129-86c7-1d486af1a2e8', 'Admin', null, 'admin', 'admin@test.com', null, null, null, 'User')
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'570a3e29-fdfe-4129-a7d4-2aa74941de21', 'Editor', null, 'editor', 'editor@test.com', null, null, null, 'User')
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'907030bc-46d5-40c0-af39-34bfa7ea1b5b', 'Reader', null, 'reader', 'reader@test.com', null, null, null, 'User');
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'fe1f953d-0300-4b2f-ac11-d629e96c4739', 'Noaccess', null, 'noaccess', 'noaccess@test.com', null, null, null, 'User');
 
 
-INSERT [dbo].[UserGroups] ([Id], [Name], [Description], [AppId]) VALUES 
-	(N'b410a15e-a4dc-47c0-8821-5b11719c527c', N'Administrators', 'Administrators of all applications', null)
-INSERT [dbo].[UserGroups] ([Id], [Name], [Description], [AppId]) VALUES 
-	(N'547c24e4-e620-4375-95f6-7f87e30e369e', N'Administrators', 'Administrators of Northwind Sample', 2)
-INSERT [dbo].[UserGroups] ([Id], [Name], [Description], [AppId]) VALUES 
-	(N'ef8e6353-bb56-4a9e-ae42-5db03833b35e', N'Everyone', 'Everyone of Northwind Sample', 2)
-INSERT [dbo].[UserGroups] ([Id], [Name], [Description], [AppId]) VALUES 
-	(N'f6639693-c915-4ba7-a4b8-37b511141a5e', N'Editors', 'Editors of Northwind Sample', 2)
-INSERT [dbo].[UserGroups] ([Id], [Name], [Description], [AppId]) VALUES 
-	(N'b50de242-2758-4ff5-a644-47b506ee39dd', N'Readers', 'Readers of Northwind Sample', 2)
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'b410a15e-a4dc-47c0-8821-5b11719c527c', null, null, null, null, 'Administrators', 'Administrators of all applications', null, 'UserGroup')
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'547c24e4-e620-4375-95f6-7f87e30e369e', null, null, null, null, 'Administrators', 'Administrators of Northwind Sample', 2, 'UserGroup')
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'ef8e6353-bb56-4a9e-ae42-5db03833b35e', null, null, null, null, 'Everyone', 'Everyone of Northwind Sample', 2, 'UserGroup')
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'f6639693-c915-4ba7-a4b8-37b511141a5e', null, null, null, null, 'Editors', 'Editors of Northwind Sample', 2, 'UserGroup')
+INSERT [dbo].[Principals] ([Id], [FirstName], [LastName], [UserName], [Email], [GroupName], [Description], [AppId], [Discriminator]) 
+	VALUES (N'b50de242-2758-4ff5-a644-47b506ee39dd', null, null, null, null, 'Readers', 'Readers of Northwind Sample', 2, 'UserGroup')
 
 
 -- user agus, admin are a member of Administrators group

@@ -13,6 +13,8 @@ namespace DotWeb
         [Key, Column(Order=1)]
         public string UserId { get; set; }
 
+        public virtual User User { get; set; }
+
         [Key, Column(Order=2)]
         public string GroupId { get; set; }
 

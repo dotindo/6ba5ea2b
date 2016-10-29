@@ -27,6 +27,8 @@ namespace DotWeb
         [Required, MaxLength(128)]
         public string PrincipalId { get; set; }
 
+        public virtual Principal Principal { get; set; }
+
         public PrincipalType PrincipalType { get; set; }
 
         public int RoleId { get; set; }

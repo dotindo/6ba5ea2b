@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace DotWeb
 {
-    public class UserGroup
+    public class UserGroup : Principal
     {
-        [Key, MaxLength(128)]
-        public string Id { get; set; }
-
         [Required, MaxLength(50)]
-        public string Name { get; set; }
+        public string GroupName { get; set; }
+
+        public override string Name 
+        { 
+            get { return GroupName; }
+        }
 
         public string Description { get; set; }
 

@@ -210,8 +210,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account\ApplicationSignInManager.cs" />
-    <Compile Include="Account\ApplicationUserManager.cs" />
     <Compile Include="Account\ChangePassword.aspx.cs">
       <DependentUpon>ChangePassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

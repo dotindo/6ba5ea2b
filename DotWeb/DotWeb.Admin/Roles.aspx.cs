@@ -43,9 +43,14 @@ namespace DotWeb.Admin
             gridView.DataBind();
         }
 
+        protected void gridView_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            e.NewValues["AppId"] = Session["AppId"].ToString();
+        }
+
         protected void gridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
-
+            e.NewValues["AppId"] = Session["AppId"].ToString();
         }
 
         protected void gridView_CellEditorInitialize(object sender, DevExpress.Web.ASPxGridViewEditorEventArgs e)
@@ -53,9 +58,20 @@ namespace DotWeb.Admin
 
         }
 
+        protected void permissionsGridView_Init(object sender, EventArgs e)
+        {
+            var gridView = (sender as ASPxGridView);
+            gridView.ForceDataRowType(typeof(Permission));
+        }
+
         protected void permissionsGridView_CellEditorInitialize(object sender, DevExpress.Web.ASPxGridViewEditorEventArgs e)
         {
-
+            if (e.Column.FieldName == "PermissionType")
+            {
+                var comboBox = e.Editor as ASPxComboBox;
+                comboBox.DataSource = Enum.GetNames(typeof(PermissionType));
+                comboBox.DataBind();
+            }
         }
 
         protected void permissionsGridView_BeforePerformDataSelect(object sender, EventArgs e)
@@ -63,9 +79,15 @@ namespace DotWeb.Admin
             Session["RoleId"] = (sender as ASPxGridView).GetMasterRowKeyValue();
         }
 
+        protected void permissionsGridView_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            e.NewValues["RoleId"] = Session["RoleId"].ToString();
+        }
+
         protected void permissionsGridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
-
+            e.NewValues["RoleId"] = Session["RoleId"].ToString();
         }
+
     }
 }

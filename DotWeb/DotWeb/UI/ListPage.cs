@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -45,7 +46,7 @@ namespace DotWeb.UI
             if (tableMeta == null)
                 Response.Redirect("~/404.aspx");
 
-            var user = HttpContext.Current.Session["applicationUser"] as ApplicationUser;
+            var user = HttpContext.Current.Session["user"] as User;
             var sessionName = string.Format("accessRights_{0}_{1}", user == null ? "default" : user.UserName, HttpContext.Current.Request.RawUrl);
             permissions = Session[sessionName] as List<PermissionType>;
             var gridCreator = new MasterGridCreator(tableMeta, connectionString, permissions);

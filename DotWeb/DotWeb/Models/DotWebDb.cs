@@ -22,6 +22,8 @@ namespace DotWeb
 
         public DbSet<Role> Roles { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         public DbSet<UserGroup> UserGroups { get; set; }
 
         public DbSet<UserGroupMembers> UserGroupMembers { get; set; }
@@ -53,7 +55,9 @@ namespace DotWeb
 
             modelBuilder.Entity<UserGroupMembers>().HasRequired(m => m.Group).WithMany().HasForeignKey(m => m.GroupId).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<AccessRight>().HasRequired(p => p.Role).WithMany().HasForeignKey(r => r.RoleId).WillCascadeOnDelete(false);
+            modelBuilder.Entity<AccessRight>().HasRequired(r => r.Role).WithMany().HasForeignKey(r => r.RoleId).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<AccessRight>().HasRequired(r => r.Principal).WithMany().HasForeignKey(r => r.PrincipalId).WillCascadeOnDelete(false);
         }
     }
 }

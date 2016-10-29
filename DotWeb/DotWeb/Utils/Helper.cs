@@ -150,7 +150,7 @@ namespace DotWeb.Utils
             return inputStr.Replace(" ", string.Empty);
         }
 
-        public static List<PermissionType> GetPermissions(ApplicationUser user, string url, int appId)
+        public static List<PermissionType> GetPermissions(User user, string url, int appId)
         {
             var result = new List<PermissionType>();
             var accessRights = new List<AccessRight>();
@@ -161,7 +161,7 @@ namespace DotWeb.Utils
                     .Where(m => m.UserId == user.Id && m.Group.AppId == appId).ToList();
 
                 // Add everyone
-                var everyone = context.UserGroups.SingleOrDefault(g => g.AppId == appId && g.Name.Equals(Constants.Everyone, StringComparison.InvariantCultureIgnoreCase));
+                var everyone = context.UserGroups.SingleOrDefault(g => g.AppId == appId && g.GroupName.Equals(Constants.Everyone, StringComparison.InvariantCultureIgnoreCase));
                 if (everyone != null)
                     membership.Add(new UserGroupMembers() { UserId = user.Id, Group = everyone });
 

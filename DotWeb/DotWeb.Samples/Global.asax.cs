@@ -12,13 +12,6 @@ using System.Web.Routing;
 namespace DotWeb_Samples {
     public class Global_asax : System.Web.HttpApplication
     {
-        protected UserManager<ApplicationUser> userManager;
-        public virtual UserManager<ApplicationUser> UserManager
-        {
-            get { return userManager ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-            protected set { userManager = value; }
-        }
-
         void Application_Start(object sender, EventArgs e)
         {
             DevExpress.Web.ASPxWebControl.CallbackError += new EventHandler(Application_Error);
@@ -61,7 +54,7 @@ namespace DotWeb_Samples {
             if (!HttpContext.Current.User.Identity.IsAuthenticated || HttpContext.Current.Session == null) return;
 
             //var user = UserManager.FindByName(HttpContext.Current.User.Identity.Name);
-            var user = HttpContext.Current.Session["applicationUser"] as ApplicationUser;
+            var user = HttpContext.Current.Session["user"] as User;
             if (user != null)
             {
                 var sessionName = string.Format("accessRights_{0}_{1}", user.UserName, HttpContext.Current.Request.RawUrl);
@@ -82,15 +75,21 @@ namespace DotWeb_Samples {
 
         void Session_Start(object sender, EventArgs e)
         {
-            if (HttpContext.Current.Session["applicationUser"] == null)
-                HttpContext.Current.Session["applicationUser"] = UserManager.FindByName(HttpContext.Current.User.Identity.Name);
+            if (HttpContext.Current.User.Identity.IsAuthenticated && HttpContext.Current.Session["user"] == null)
+            {
+                using (var appContext = new DotWebDb())
+                {
+                    var appUser = appContext.Users.SingleOrDefault(u => u.UserName.Equals(HttpContext.Current.User.Identity.Name, StringComparison.InvariantCultureIgnoreCase));
+                    if (appUser != null)
+                    {
+                        Session["user"] = appUser;
+                    }
+                }
+            }
         }
 
-        void Session_End(object sender, EventArgs e) {
-            // Code that runs when a session ends. 
-            // Note: The Session_End event is raised only when the sessionstate mode
-            // is set to InProc in the Web.config file. If session mode is set to StateServer 
-            // or SQLServer, the event is not raised.
+        void Session_End(object sender, EventArgs e)
+        {
         }
 
     }

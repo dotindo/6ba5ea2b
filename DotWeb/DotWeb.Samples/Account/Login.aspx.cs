@@ -9,10 +9,12 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.Security;
 using Microsoft.AspNet.Identity.Owin;
+using DotWeb;
 
 namespace DotWeb_Samples {
-    public partial class Login : AccountBasePage {
-        protected void Page_Load(object sender, EventArgs e) {
+    public partial class Login : System.Web.UI.Page {
+        protected void Page_Load(object sender, EventArgs e)
+        {
             if (!IsPostBack)
             {
                 if (User.Identity.IsAuthenticated)
@@ -28,36 +30,34 @@ namespace DotWeb_Samples {
             }
         }
 
-        protected void btnLogin_Click(object sender, EventArgs e) {
-            // Require the user to have a confirmed email before they can log on.
-            var user = UserManager.FindByName(tbUserName.Text);
-            if (user == null)
+        protected void btnLogin_Click(object sender, EventArgs e)
+        {
+            using (var context = new IdentityDb())
             {
-                lblError.Text = "User not found!";
-                divError.Attributes["class"] = "form-field visible";
-            }
-            else
-            {
-                // To enable password failures to trigger account lockout, change to shouldLockout: true
-                var signIn = SignInManager.PasswordSignIn(tbUserName.Text, tbPassword.Text, isPersistent: false, shouldLockout: false);
-                switch (signIn)
+                var userStore = new UserStore<IdentityUser>(context);
+                var userManager = new UserManager<IdentityUser>(userStore);
+                var user = userManager.Find(tbUserName.Text, tbPassword.Text);
+
+                if (user == null)
                 {
-                    case SignInStatus.Success:
-                        HttpContext.Current.Session["applicationUser"] = user;
-                        Response.Redirect("~/");
-                        break;
-                    case SignInStatus.LockedOut:
-                        lblError.Text = "Account was locked. Please contact Administrator to unlock it.";
-                        break;
-                    case SignInStatus.RequiresVerification:
-                        lblError.Text = "Account requires verification. Please contact Administrator for assistance.";
-                        break;
-                    case SignInStatus.Failure:
-                    default:
-                        lblError.Text = "Sign-in failed. Please check your username and password.";
-                        break;
+                    lblError.Text = "Invalid username or password!";
+                    divError.Attributes["class"] = "form-field visible";
                 }
-                divError.Attributes["class"] = "form-field visible";
+                else
+                {
+                    var authMgr = HttpContext.Current.GetOwinContext().Authentication;
+                    var userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+                    authMgr.SignIn(new AuthenticationProperties() { IsPersistent = false }, userIdentity);
+                    using (var appContext = new DotWebDb())
+                    {
+                        var appUser = appContext.Users.SingleOrDefault(u => u.UserName.Equals(user.UserName, StringComparison.InvariantCultureIgnoreCase));
+                        if (appUser != null)
+                        {
+                            Session["user"] = appUser;
+                        }
+                    }
+                    Response.Redirect("~/");
+                }
             }
         }
     }

@@ -11,7 +11,7 @@ using Microsoft.Owin.Security;
 using DotWeb;
 
 namespace DotWeb_Samples {
-    public partial class Register : AccountBasePage
+    public partial class Register : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -21,24 +21,38 @@ namespace DotWeb_Samples {
         {
             try 
             {
-                var appUser = new ApplicationUser { UserName = tbUserName.Text, FirstName = tbFirstName.Text, LastName = tbLastName.Text, Email = tbEmail.Text };
-                var result = UserManager.Create(appUser, tbPassword.Text);
+                using (var context = new IdentityDb())
+                {
+                    var userStore = new UserStore<IdentityUser>(context);
+                    var userManager = new UserManager<IdentityUser>(userStore);
 
-                if (result.Succeeded)
-                {
-                    Response.Redirect(Request.QueryString["ReturnUrl"] ?? "~/Account/RegisterSuccess.aspx");
-                }
-                else
-                {
-                    lblError.Text = "";
-                    foreach (var error in result.Errors)
-                        lblError.Text += error;
-                    divError.Attributes["class"] = "form-field visible";
+                    var user = new IdentityUser() { UserName = tbUserName.Text, Email = tbEmail.Text };
+                    IdentityResult result = userManager.Create(user, tbPassword.Text);
+
+                    if (result.Succeeded)
+                    {
+                        using (var appContext = new DotWebDb())
+                        {
+                            var appUser = new User() { Id = user.Id, Email = user.Email, FirstName = tbFirstName.Text, LastName = tbLastName.Text };
+                            appContext.Users.Add(appUser);
+                            appContext.SaveChanges();
+                        }
+
+                        Response.Redirect(Request.QueryString["ReturnUrl"] ?? "~/Account/RegisterSuccess.aspx");
+                    }
+                    else
+                    {
+                        lblError.Text = "";
+                        foreach (var error in result.Errors)
+                            lblError.Text += error;
+                        divError.Attributes["class"] = "form-field visible";
+                    }
                 }
             }
             catch (Exception ex)
             {
                 lblError.Text = ex.Message;
+                divError.Attributes["class"] = "form-field visible";
             }
         }
     }

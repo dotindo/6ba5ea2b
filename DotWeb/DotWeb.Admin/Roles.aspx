@@ -22,10 +22,10 @@
     </dx:ASPxFormLayout>
 
 	<dx:ASPxGridView ID="gridView" runat="server" AutoGenerateColumns="false" DataSourceID="rolesDataSource" ClientInstanceName="gridView"
-		KeyFieldName="Id" CssClass="gridView" OnInit="gridView_Init" OnCustomCallback="gridView_CustomCallback"
+		KeyFieldName="Id" CssClass="gridView" OnInit="gridView_Init" OnCustomCallback="gridView_CustomCallback" OnRowInserting="gridView_RowInserting"
         OnRowUpdating="gridView_RowUpdating" OnCellEditorInitialize="gridView_CellEditorInitialize">
 		<Columns>
-			<dx:GridViewCommandColumn ShowDeleteButton="false" ShowEditButton="true" ShowNewButtonInHeader="false" VisibleIndex="0"></dx:GridViewCommandColumn>
+			<dx:GridViewCommandColumn ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0"></dx:GridViewCommandColumn>
             <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" Visible="false">
                 <PropertiesTextEdit>
                     <ValidationSettings RequiredField-IsRequired="true" />
@@ -48,8 +48,10 @@
                                 <ContentCollection>
                                     <dx:ContentControl runat="server">
                                         <dx:ASPxGridView ID="permissionsGridView" runat="server" AutoGenerateColumns="false" DataSourceID="permissionsDataSource" 
-                                            ClientInstanceName="permissionsGridView" KeyFieldName="Id" CssClass="gridView" OnCellEditorInitialize="permissionsGridView_CellEditorInitialize"
-                                            OnBeforePerformDataSelect="permissionsGridView_BeforePerformDataSelect" OnRowUpdating="permissionsGridView_RowUpdating">
+                                            ClientInstanceName="permissionsGridView" KeyFieldName="Id" CssClass="gridView" 
+                                            OnInit="permissionsGridView_Init" OnCellEditorInitialize="permissionsGridView_CellEditorInitialize"
+                                            OnBeforePerformDataSelect="permissionsGridView_BeforePerformDataSelect" OnRowInserting="permissionsGridView_RowInserting"
+                                            OnRowUpdating="permissionsGridView_RowUpdating">
                                             <Columns>
 			                                    <dx:GridViewCommandColumn ShowDeleteButton="true" ShowEditButton="false" ShowNewButtonInHeader="true" VisibleIndex="0"></dx:GridViewCommandColumn>
                                                 <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" Visible="false">
@@ -57,11 +59,8 @@
                                                         <ValidationSettings RequiredField-IsRequired="true" />
                                                     </PropertiesTextEdit>
                                                 </dx:GridViewDataTextColumn>
-                                                <dx:GridViewDataTextColumn FieldName="PermissionType" Caption="Permission">
-                                                    <PropertiesTextEdit>
-                                                        <ValidationSettings RequiredField-IsRequired="true" />
-                                                    </PropertiesTextEdit>
-                                                </dx:GridViewDataTextColumn>
+                                                <dx:GridViewDataComboBoxColumn FieldName="PermissionType" Caption="Permission">
+                                                </dx:GridViewDataComboBoxColumn>
                                             </Columns>
 		                                    <Settings ShowGroupPanel="false" />
 		                                    <SettingsPager PageSize="25" />
@@ -93,7 +92,7 @@
         </WhereParameters>
     </ef:EntityDataSource>
     <ef:EntityDataSource ID="permissionsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Permissions"
-        EnableInsert="false" EnableUpdate="true" EnableDelete="true" AutoGenerateWhereClause="true" OrderBy="it.PermissionType">
+        EnableInsert="true" EnableUpdate="true" EnableDelete="true" AutoGenerateWhereClause="true" OrderBy="it.PermissionType">
         <WhereParameters>
             <asp:SessionParameter Name="RoleId" SessionField="RoleId" Type="Int32" />
         </WhereParameters>

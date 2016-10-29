@@ -15,6 +15,12 @@ namespace DotWeb.Admin
 
         }
 
+        protected void gridView_Init(object sender, EventArgs e)
+        {
+            var gridView = (sender as ASPxGridView);
+            gridView.ForceDataRowType(typeof(UserGroup));
+        }
+
         protected void appFilterComboBox_DataBound(object sender, EventArgs e)
         {
             if (Session["AppId"] != null)
@@ -30,12 +36,6 @@ namespace DotWeb.Admin
             }
         }
 
-        protected void gridView_Init(object sender, EventArgs e)
-        {
-            var gridView = (sender as ASPxGridView);
-            gridView.ForceDataRowType(typeof(UserGroup));
-        }
-
         protected void gridView_CustomCallback(object sender, DevExpress.Web.ASPxGridViewCustomCallbackEventArgs e)
         {
             if ((string)Session["AppId"] == e.Parameters) return;
@@ -43,9 +43,15 @@ namespace DotWeb.Admin
             gridView.DataBind();
         }
 
+        protected void gridView_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            e.NewValues["AppId"] = Session["AppId"].ToString();
+            e.NewValues["Id"] = Guid.NewGuid().ToString().ToLower();
+        }
+
         protected void gridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
-
+            e.NewValues["AppId"] = Session["AppId"].ToString();
         }
 
         protected void gridView_CellEditorInitialize(object sender, DevExpress.Web.ASPxGridViewEditorEventArgs e)
@@ -53,17 +59,38 @@ namespace DotWeb.Admin
 
         }
 
+        protected void membersGridView_Init(object sender, EventArgs e)
+        {
+            var gridView = (sender as ASPxGridView);
+            gridView.ForceDataRowType(typeof(UserGroupMembers));
+        }
+
         protected void membersGridView_CellEditorInitialize(object sender, DevExpress.Web.ASPxGridViewEditorEventArgs e)
         {
-
         }
+
+        //public List<ApplicationUser> GetUsers()
+        //{
+        //    IdentityDb context = IdentityDb.Create();
+        //    return context.Users.ToList();
+        //}
 
         protected void membersGridView_BeforePerformDataSelect(object sender, EventArgs e)
         {
             Session["GroupId"] = (sender as ASPxGridView).GetMasterRowKeyValue();
         }
 
+        protected void membersGridView_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            e.NewValues["GroupId"] = Session["GroupId"].ToString();
+        }
+
         protected void membersGridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            e.NewValues["GroupId"] = Session["GroupId"].ToString();
+        }
+
+        protected void gridView_CustomErrorText(object sender, ASPxGridViewCustomErrorTextEventArgs e)
         {
 
         }

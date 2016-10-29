@@ -13,7 +13,7 @@ namespace DotWeb.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201610270203005_Security"; }
+            get { return "201610290234316_Security"; }
         }
         
         string IMigrationMetadata.Source
