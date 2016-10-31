@@ -146,6 +146,7 @@
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterSuccess.aspx" />
+    <Content Include="AddUser.aspx" />
     <Content Include="Apps.aspx" />
     <Content Include="App_Data\SideMenu.xml" />
     <Content Include="App_Data\TopMenu.xml" />
@@ -244,6 +245,13 @@
     </Compile>
     <Compile Include="Account\RegisterSuccess.aspx.designer.cs">
       <DependentUpon>RegisterSuccess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AddUser.aspx.cs">
+      <DependentUpon>AddUser.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddUser.aspx.designer.cs">
+      <DependentUpon>AddUser.aspx</DependentUpon>
     </Compile>
     <Compile Include="Apps.aspx.cs">
       <DependentUpon>Apps.aspx</DependentUpon>

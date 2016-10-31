@@ -11,8 +11,14 @@ using System.Threading.Tasks;
 
 namespace DotWeb
 {
-    public class User : Principal
+    public class User
     {
+        [Key, MaxLength(128)]
+        public string Id { get; set; }
+
+        [Required, MaxLength(50)]
+        public string UserName { get; set; }
+
         [Required, MaxLength(50)]
         public string FirstName { get; set; }
 
@@ -20,7 +26,7 @@ namespace DotWeb
         public string LastName { get; set; }
 
         [NotMapped]
-        public override string Name
+        public string FullName
         {
             get
             {
@@ -29,9 +35,6 @@ namespace DotWeb
                 return string.Format("{0} {1}", FirstName, LastName);
             }
         }
-
-        [Required, MaxLength(50)]
-        public string UserName { get; set; }
 
         [Required, MaxLength(100)]
         public string Email { get; set; }

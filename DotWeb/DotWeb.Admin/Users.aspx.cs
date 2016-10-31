@@ -13,12 +13,10 @@ namespace DotWeb.Admin
     {
         protected void Page_Init(object sender, EventArgs e)
         {
-            //gridView.DataSource = GetUsers();
         }
         
         protected void Page_Load(object sender, EventArgs e)
         {
-            gridView.DataBind();
         }
 
     }

@@ -70,14 +70,13 @@
     <Compile Include="Migrations\201610200014335_Initial.Designer.cs">
       <DependentUpon>201610200014335_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201610290234316_Security.cs" />
-    <Compile Include="Migrations\201610290234316_Security.Designer.cs">
-      <DependentUpon>201610290234316_Security.cs</DependentUpon>
+    <Compile Include="Migrations\201610310255194_Security.cs" />
+    <Compile Include="Migrations\201610310255194_Security.Designer.cs">
+      <DependentUpon>201610310255194_Security.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\App.cs" />
     <Compile Include="Models\IdentityDb.cs" />
-    <Compile Include="Models\Principal.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DotWebDb.cs" />
@@ -246,8 +245,8 @@
   <ItemGroup>
     <Content Include="lib\readme.txt" />
     <Content Include="readme.txt" />
-    <EmbeddedResource Include="Migrations\201610290234316_Security.resx">
-      <DependentUpon>201610290234316_Security.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201610310255194_Security.resx">
+      <DependentUpon>201610310255194_Security.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_data\init-data-security.sql" />
   </ItemGroup>

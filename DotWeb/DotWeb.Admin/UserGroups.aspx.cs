@@ -69,12 +69,6 @@ namespace DotWeb.Admin
         {
         }
 
-        //public List<ApplicationUser> GetUsers()
-        //{
-        //    IdentityDb context = IdentityDb.Create();
-        //    return context.Users.ToList();
-        //}
-
         protected void membersGridView_BeforePerformDataSelect(object sender, EventArgs e)
         {
             Session["GroupId"] = (sender as ASPxGridView).GetMasterRowKeyValue();

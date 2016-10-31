@@ -1,12 +1,12 @@
 <%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Light.master" CodeBehind="Login.aspx.cs" Inherits="DotWeb_Samples.Login" %>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="accountHeader">
-    <h2>
-        Log In</h2>
+<div class="accountHeader">
+    <h2>Log In</h2>
     <p>
         Please enter your username and password. 
-        <a href="Register.aspx">Register</a> if you don't have an account.</p>
+        <a href="Register.aspx">Register</a> if you don't have an account.
+    </p>
 </div>
 <dx:ASPxLabel ID="lblUserName" runat="server" AssociatedControlID="tbUserName" Text="User Name:" />
 <div class="form-field">

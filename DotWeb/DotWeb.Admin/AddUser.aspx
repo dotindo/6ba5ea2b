@@ -1,6 +1,6 @@
-<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Light.master" CodeBehind="Register.aspx.cs" Inherits="DotWeb_Samples.Register" %>
-
-<asp:content id="ClientArea" contentplaceholderid="MainContent" runat="server">
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.master" AutoEventWireup="true" CodeBehind="AddUser.aspx.cs" Inherits="DotWeb.Admin.AddUser" %>
+<asp:Content ID="pageTitle" ContentPlaceHolderID="PageTitle" runat="server">Add User</asp:Content>
+<asp:Content ID="content" ContentPlaceHolderID="MainContent" runat="server">
     <div class="accountHeader">
         <h2>Create a New Account</h2>
         <p>Use the form below to create a new account.</p>
@@ -65,4 +65,5 @@
     <dx:ASPxButton ID="btnCreateUser" runat="server" Text="Create User" ValidationGroup="RegisterUserValidationGroup"
         OnClick="btnCreateUser_Click">
     </dx:ASPxButton>
-</asp:content>
+
+</asp:Content>

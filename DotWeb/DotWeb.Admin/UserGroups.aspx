@@ -31,7 +31,7 @@
                     <ValidationSettings RequiredField-IsRequired="true" />
                 </PropertiesTextEdit>
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Name" Caption="Name">
+            <dx:GridViewDataTextColumn FieldName="GroupName" Caption="Name">
                 <PropertiesTextEdit>
                     <ValidationSettings RequiredField-IsRequired="true" />
                 </PropertiesTextEdit>
@@ -54,7 +54,7 @@
                                             <Columns>
 			                                    <dx:GridViewCommandColumn ShowDeleteButton="true" ShowEditButton="false" ShowNewButtonInHeader="true" VisibleIndex="0"></dx:GridViewCommandColumn>
                                                 <dx:GridViewDataComboBoxColumn FieldName="UserId" Caption="User Id">
-                                                    <PropertiesComboBox DataSourceID="usersSqlDataSource" ValueField="Id" TextField="FirstName">
+                                                    <PropertiesComboBox DataSourceID="usersDataSource" ValueField="Id" TextField="UserName">
                                                     </PropertiesComboBox>
                                                 </dx:GridViewDataComboBoxColumn>
                                             </Columns>
@@ -82,7 +82,7 @@
 	</dx:ASPxGridView>
 
     <ef:EntityDataSource ID="userGroupsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="UserGroups"
-        EnableInsert="true" EnableUpdate="true" EnableDelete="true" AutoGenerateWhereClause="true" OrderBy="it.Name">
+        EnableInsert="true" EnableUpdate="true" EnableDelete="true" AutoGenerateWhereClause="true" OrderBy="it.GroupName">
         <WhereParameters>
             <asp:SessionParameter Name="AppId" SessionField="AppId" DefaultValue="0" DbType="Int32" />
         </WhereParameters>
@@ -95,6 +95,5 @@
     </ef:EntityDataSource>
 
     <ef:EntityDataSource ID="appsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Apps" />
-
-    <asp:SqlDataSource ID="usersSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:DotWebDb %>" SelectCommand="SELECT * FROM dbo.ApplicationUser" />
+    <ef:EntityDataSource ID="usersDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Users" />
 </asp:Content>

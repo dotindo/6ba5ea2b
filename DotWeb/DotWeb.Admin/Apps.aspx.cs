@@ -65,7 +65,7 @@ namespace DotWeb.Admin
                     var users = context.Users.ToList();
                     comboBox.DataSource = users;
                     comboBox.ValueField = "Id";
-                    comboBox.TextField = "Name";
+                    comboBox.TextField = "UserName";
                     comboBox.DataBind();
                 }
             }
@@ -77,7 +77,7 @@ namespace DotWeb.Admin
                     var userGroups = context.UserGroups.Where(g => g.AppId == appId).ToList();
                     comboBox.DataSource = userGroups;
                     comboBox.ValueField = "Id";
-                    comboBox.TextField = "Name";
+                    comboBox.TextField = "GroupName";
                     comboBox.DataBind();
                 }
             }
