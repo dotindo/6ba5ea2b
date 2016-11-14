@@ -15,13 +15,19 @@ namespace DotWeb.UI
         /// Create <see cref="GridViewCommandColumn"/> instance containing Edit and Delete buttons. The New button
         /// is located on the header only, not on every row.
         /// </summary>
+        /// <param name="allowNew"></param>
+        /// <param name="allowEdit"></param>
+        /// <param name="allowDelete"></param>
         /// <returns>An instance of <see cref="GridViewCommandColumn"/></returns>
-        internal static GridViewCommandColumn AddGridViewCommandColumns()
+        internal static GridViewCommandColumn AddGridViewCommandColumns(bool allowNew, bool allowEdit, bool allowDelete)
         {
             var commandColumn = new GridViewCommandColumn();
-            commandColumn.ShowEditButton = true;
-            commandColumn.ShowDeleteButton = true;
-            commandColumn.ShowNewButtonInHeader = true;
+            if (allowEdit)
+                commandColumn.ShowEditButton = true;
+            if (allowDelete)
+                commandColumn.ShowDeleteButton = true;
+            if (allowNew)
+                commandColumn.ShowNewButtonInHeader = true;
 
             return commandColumn;
         }
@@ -93,6 +99,7 @@ namespace DotWeb.UI
             var textColumn = new GridViewDataTextColumn();
             if (column.DataType == TypeCode.String && column.MaxLength.HasValue)
                 textColumn.PropertiesTextEdit.MaxLength = column.MaxLength.Value;
+            textColumn.PropertiesTextEdit.ClientSideEvents.KeyDown = "function(s,e) { if (e.htmlEvent.keyCode == ASPxKey.Enter) e.htmlEvent.keyCode = ASPxKey.Tab; }";
             dataColumn = textColumn;
             return dataColumn;
         }
@@ -184,6 +191,33 @@ namespace DotWeb.UI
             return ds;
         }
 
+        internal static void gridView_CellEditorInitialize(TableMeta tableMeta, ASPxGridViewEditorEventArgs e)
+        {
+            var columnMeta = tableMeta.Columns.SingleOrDefault(c => c.Name.Equals(e.Column.FieldName, System.StringComparison.InvariantCultureIgnoreCase));
+            if (columnMeta == null)
+                throw new ArgumentException(string.Format("Column meta entry not found for column ", e.Column.FieldName));
+            var sqlDataSource = e.Editor.DataSource as SqlDataSource;
+            ColumnMeta filterColumnMeta = null;
+            if (!string.IsNullOrEmpty(columnMeta.FilterColumn))
+                filterColumnMeta = columnMeta.ReferenceTable.Columns.SingleOrDefault(c => c.Name.Equals(columnMeta.FilterColumn));
+            if (filterColumnMeta != null)
+            {
+                sqlDataSource.SelectCommand = SqlHelper.AddWhereConditionIfNotExists(sqlDataSource.SelectCommand, filterColumnMeta.Name);
+                bool found = false;
+                foreach (Parameter parameter in sqlDataSource.SelectParameters)
+                {
+                    if (parameter.Name.Equals(filterColumnMeta.Name, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                    sqlDataSource.SelectParameters.Add(new Parameter(filterColumnMeta.Name, filterColumnMeta.DataType, e.KeyValue.ToString()));
+            }
+            e.Editor.DataBind();
+        }
+
         public static void gridView_CustomColumnDisplayText(object sender, DevExpress.Web.ASPxGridViewColumnDisplayTextEventArgs e, int gridTextColumnMaxLength)
         {
             var gridView = (sender as ASPxGridView);
@@ -198,6 +232,5 @@ namespace DotWeb.UI
                 }
             }
         }
-
     }
 }

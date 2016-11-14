@@ -1,12 +1,12 @@
 <%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Light.master" CodeBehind="Login.aspx.cs" Inherits="DotWeb_Admin.Login" %>
 
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="accountHeader">
-    <h2>
-        Log In</h2>
+<div class="accountHeader">
+    <h2>Log In</h2>
     <p>
         Please enter your username and password. 
-        <a href="Register.aspx">Register</a> if you don't have an account.</p>
+        <a href="Register.aspx">Register</a> if you don't have an account.
+    </p>
 </div>
 <dx:ASPxLabel ID="lblUserName" runat="server" AssociatedControlID="tbUserName" Text="User Name:" />
 <div class="form-field">
@@ -23,6 +23,9 @@
             <RequiredField ErrorText="Password is required." IsRequired="true" />
         </ValidationSettings>
     </dx:ASPxTextBox>
+</div>
+<div id="divError" runat="server" Class="form-field hidden">
+    <dx:ASPxLabel ID="lblError" runat="server" CssClass="errorText"></dx:ASPxLabel>
 </div>
 <dx:ASPxButton ID="btnLogin" runat="server" Text="Log In" ValidationGroup="LoginUserValidationGroup"
     OnClick="btnLogin_Click">

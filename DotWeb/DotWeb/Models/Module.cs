@@ -80,7 +80,7 @@ namespace DotWeb
         /// <summary>
         /// This property is related to <see cref="GroupId"/> property.
         /// </summary>
-        public virtual Group Group { get; set; }
+        public virtual ModuleGroup Group { get; set; }
 
         /// <summary>
         /// String representation of module.

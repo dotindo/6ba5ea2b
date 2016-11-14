@@ -2,11 +2,9 @@
 
 <asp:content id="ClientArea" contentplaceholderid="MainContent" runat="server">
     <div class="accountHeader">
-    <h2>
-        Create a New Account</h2>
-    <p>Use the form below to create a new account.</p>
-    <p>Passwords are required to be a minimum of <%= Membership.MinRequiredPasswordLength %> characters in length.</p>
-</div>
+        <h2>Create a New Account</h2>
+        <p>Use the form below to create a new account.</p>
+    </div>
     <dx:ASPxLabel ID="lblUserName" runat="server" AssociatedControlID="tbUserName" Text="User Name:" />
     <div class="form-field">
         <dx:ASPxTextBox ID="tbUserName" runat="server" Width="200px">
@@ -22,6 +20,19 @@
                 <RequiredField ErrorText="E-mail is required." IsRequired="true" />
                 <RegularExpression ErrorText="Email validation failed" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" />
             </ValidationSettings>
+        </dx:ASPxTextBox>
+    </div>
+    <dx:ASPxLabel ID="lblFirstName" runat="server" AssociatedControlID="tbFirstName" Text="First Name:" />
+    <div class="form-field">
+        <dx:ASPxTextBox ID="tbFirstName" runat="server" Width="200px">
+            <ValidationSettings ValidationGroup="RegisterUserValidationGroup">
+                <RequiredField ErrorText="First name is required." IsRequired="true" />
+            </ValidationSettings>
+        </dx:ASPxTextBox>
+    </div>
+    <dx:ASPxLabel ID="lblLastName" runat="server" AssociatedControlID="tbLastName" Text="Last Name:" />
+    <div class="form-field">
+        <dx:ASPxTextBox ID="tbLastName" runat="server" Width="200px">
         </dx:ASPxTextBox>
     </div>
     <dx:ASPxLabel ID="lblPassword" runat="server" AssociatedControlID="tbPassword" Text="Password:" />
@@ -47,6 +58,9 @@
                 e.errorText = 'The Password and Confirmation Password must match.';
             }" />
         </dx:ASPxTextBox>
+    </div>
+    <div id="divError" runat="server" Class="form-field hidden">
+        <dx:ASPxLabel ID="lblError" runat="server" CssClass="errorText"></dx:ASPxLabel>
     </div>
     <dx:ASPxButton ID="btnCreateUser" runat="server" Text="Create User" ValidationGroup="RegisterUserValidationGroup"
         OnClick="btnCreateUser_Click">

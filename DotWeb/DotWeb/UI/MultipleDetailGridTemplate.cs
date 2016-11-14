@@ -1,4 +1,5 @@
 ﻿using DevExpress.Web;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI;
 
@@ -16,16 +17,19 @@ namespace DotWeb.UI
         private object masterKey;
         private TableMeta masterTableMeta;
         private string connectionString;
+        private List<PermissionType> permissions;
 
         /// <summary>
         /// Paramterized constructor of <see cref="MultipleDetailGridTemplate"/>.
         /// </summary>
         /// <param name="masterTableMeta">Meta data of master table.</param>
         /// <param name="connectionString">The connection string to underlying database.</param>
-        public MultipleDetailGridTemplate(TableMeta masterTableMeta, string connectionString)
+        /// <param name="permissions"></param>
+        public MultipleDetailGridTemplate(TableMeta masterTableMeta, string connectionString, List<PermissionType> permissions)
         {
             this.masterTableMeta = masterTableMeta;
             this.connectionString = connectionString;
+            this.permissions = permissions;
         }
 
         /// <summary>
@@ -41,7 +45,7 @@ namespace DotWeb.UI
             foreach (var childTableMeta in masterTableMeta.Children.Where(c => c.IsRendered == true))
             {
                 var tabPage = new TabPage(childTableMeta.Caption);
-                var gridCreator = new DetailGridCreator(childTableMeta, masterTableMeta, masterKey, connectionString);
+                var gridCreator = new DetailGridCreator(childTableMeta, masterTableMeta, masterKey, connectionString, permissions);
                 tabPage.Controls.Add(gridCreator.CreateDetailGrid());
                 pageControl.TabPages.Add(tabPage);
             }

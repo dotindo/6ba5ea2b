@@ -1,5 +1,6 @@
 ﻿using DevExpress.Web;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.UI;
@@ -16,19 +17,21 @@ namespace DotWeb.UI
         private TableMetaRelation detailTable;
         private TableMeta masterTableMeta;
         private string connectionString;
+        private List<PermissionType> permissions;
 
         /// <summary>
         /// Parameterized constructor of <see cref="DetailGridTemplate"/>.
         /// </summary>
         /// <param name="masterTableMeta">Meta data of master table.</param>
         /// <param name="connectionString">The connection string to underlying database.</param>
-        public DetailGridTemplate(TableMeta masterTableMeta, string connectionString)
+        public DetailGridTemplate(TableMeta masterTableMeta, string connectionString, List<PermissionType> permissions)
         {
             this.masterTableMeta = masterTableMeta;
             if (masterTableMeta.Children.Where(c => c.IsRendered).Count() != 1)
                 throw new ArgumentException(string.Format("Master table {0} has no child table or more than 1 child tables.", masterTableMeta.Name));
             this.detailTable = masterTableMeta.Children[0];
             this.connectionString = connectionString;
+            this.permissions = permissions;
         }
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace DotWeb.UI
         {
             parent = container;
             masterKey = ((GridViewDetailRowTemplateContainer)parent).KeyValue;
-            var gridCreator = new DetailGridCreator(detailTable, masterTableMeta, masterKey, connectionString);
+            var gridCreator = new DetailGridCreator(detailTable, masterTableMeta, masterKey, connectionString, permissions);
             parent.Controls.Add(new LiteralControl(string.Format("<h3>{0}</h3>", detailTable.Caption)));
             parent.Controls.Add(gridCreator.CreateDetailGrid());
         }

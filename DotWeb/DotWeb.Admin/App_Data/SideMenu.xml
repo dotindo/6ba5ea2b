@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu>
+  <group Text="Admin">
+    <item Text="Apps" NavigateUrl="~/Apps.aspx" />
+    <item Text="Tables" NavigateUrl="~/Tables.aspx" />
+  </group>
+  <group Text="Navigation">
+    <item Text="Modules / Groups" NavigateUrl="~/Modules.aspx" />
+  </group>
+  <group Text="Security">
+    <item Text="Users" NavigateUrl="~/Users.aspx"/>
+    <item Text="User Groups" NavigateUrl="~/UserGroups.aspx" />
+    <item Text="Roles" NavigateUrl="~/Roles.aspx" />
+  </group>
+</menu>

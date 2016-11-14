@@ -14,7 +14,7 @@ namespace DotWeb
         /// </summary>
         public App() 
         {
-            Groups = new List<Group>();
+            Groups = new List<ModuleGroup>();
             GridTextColumnMaxLength = Constants.DefaultGridTextColumnMaxLength;
             PageSize = Constants.DefaultPageSize;
             DefaultGroupName = Constants.DefaultDefaultGroupName;
@@ -40,7 +40,7 @@ namespace DotWeb
         /// <summary>
         /// Group represents group of modules. In the website interface, it will be displayed as left menu group.
         /// </summary>
-        public ICollection<Group> Groups { get; set; }
+        public ICollection<ModuleGroup> Groups { get; set; }
 
         /// <summary>
         /// Used in grid view column to set maximum length of a string that can be displayed. 

@@ -17,12 +17,12 @@ namespace DotWeb.Admin
         protected void gridView_Init(object sender, EventArgs e)
         {
             var gridView = (sender as ASPxGridView);
-            gridView.ForceDataRowType(typeof(Group));
+            gridView.ForceDataRowType(typeof(ModuleGroup));
         }
 
         protected void gridView_CustomCallback(object sender, ASPxGridViewCustomCallbackEventArgs e)
         {
-            if ((string)Session["AppId"] == e.Parameters) return;
+            if (Session["AppId"] != null && Session["AppId"].ToString() == e.Parameters) return;
             Session["AppId"] = e.Parameters;
             gridView.DataBind();
         }
@@ -110,10 +110,114 @@ namespace DotWeb.Admin
 
         protected void modulesGridView_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
         {
+            // left this blank
         }
 
         protected void modulesGridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
         {
+            // left this blank
+        }
+
+        protected void groupRightsGridView_Init(object sender, EventArgs e)
+        {
+            var gridView = (sender as ASPxGridView);
+            gridView.ForceDataRowType(typeof(AccessRight));
+        }
+
+        protected void groupRightsGridView_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            if (e.Column.FieldName == "PrincipalType")
+            {
+                var comboBox = e.Editor as ASPxComboBox;
+                comboBox.DataSource = Enum.GetNames(typeof(PrincipalType));
+                comboBox.DataBind();
+            }
+            else if (e.Column.FieldName == "PrincipalId")
+            {
+                object val = (sender as ASPxGridView).GetRowValuesByKeyValue(e.KeyValue, "PrincipalType");
+                if (val == null)
+                    val = "Group";
+                ASPxComboBox comboBox = e.Editor as ASPxComboBox;
+                FillPrincipalIdCombo(comboBox, val.ToString());
+                comboBox.Callback += comboBox_Callback;
+            }
+        }
+
+        void comboBox_Callback(object sender, CallbackEventArgsBase e)
+        {
+            FillPrincipalIdCombo(sender as ASPxComboBox, e.Parameter);
+        }
+
+        void FillPrincipalIdCombo(ASPxComboBox comboBox, string principalType)
+        {
+            if (principalType == "User")
+            {
+                using (var context = new DotWebDb())
+                {
+                    var users = context.Users.ToList();
+                    comboBox.DataSource = users;
+                    comboBox.ValueField = "Id";
+                    comboBox.TextField = "UserName";
+                    comboBox.DataBind();
+                }
+            }
+            else if (principalType == "Group")
+            {
+                using (var context = new DotWebDb())
+                {
+                    int appId = int.Parse(Session["AppId"].ToString());
+                    var userGroups = context.UserGroups.Where(g => g.AppId == appId).ToList();
+                    comboBox.DataSource = userGroups;
+                    comboBox.ValueField = "Id";
+                    comboBox.TextField = "GroupName";
+                    comboBox.DataBind();
+                }
+            }
+        }
+
+        protected void groupRightsGridView_BeforePerformDataSelect(object sender, EventArgs e)
+        {
+            Session["GroupId"] = (sender as ASPxGridView).GetMasterRowKeyValue();
+        }
+
+        protected void groupRightsGridView_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            e.NewValues["SecuredObjectType"] = SecuredObjectType.ModuleGroup;
+            e.NewValues["SecuredObjectId"] = Session["GroupId"];
+        }
+
+        protected void groupRightsGridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            e.NewValues["SecuredObjectType"] = SecuredObjectType.ModuleGroup;
+            e.NewValues["SecuredObjectId"] = Session["GroupId"];
+        }
+
+        protected void moduleRightsGridView_Init(object sender, EventArgs e)
+        {
+            var gridView = (sender as ASPxGridView);
+            gridView.ForceDataRowType(typeof(AccessRight));
+        }
+
+        protected void moduleRightsGridView_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            groupRightsGridView_CellEditorInitialize(sender, e);
+        }
+
+        protected void moduleRightsGridView_BeforePerformDataSelect(object sender, EventArgs e)
+        {
+            Session["ModuleId"] = (sender as ASPxGridView).GetMasterRowKeyValue();
+        }
+
+        protected void moduleRightsGridView_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
+        {
+            e.NewValues["SecuredObjectType"] = SecuredObjectType.Module;
+            e.NewValues["SecuredObjectId"] = Session["ModuleId"];
+        }
+
+        protected void moduleRightsGridView_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            e.NewValues["SecuredObjectType"] = SecuredObjectType.Module;
+            e.NewValues["SecuredObjectId"] = Session["ModuleId"];
         }
 
     }

@@ -1,7 +1,10 @@
 ﻿using DevExpress.Web;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 
 namespace DotWeb.UI
@@ -17,11 +20,12 @@ namespace DotWeb.UI
         protected TableMeta tableMeta;
         protected ASPxGridView masterGrid;
         protected string connectionString;
+        protected List<PermissionType> permissions;
 
         public ListPage() : base()
         {
             if (ConfigurationManager.ConnectionStrings["AppDb"] == null)
-                throw new ArgumentException("You have to speciry AppDb connection string name in web.config.");
+                throw new ArgumentException("You have to specify AppDb connection string name in web.config.");
             connectionString = ConfigurationManager.ConnectionStrings["AppDb"].ToString();
 
             Page.Init += Page_Init;
@@ -41,8 +45,11 @@ namespace DotWeb.UI
             tableMeta = schemaInfo.Tables.Where(s => s.Name.Equals(tableName, StringComparison.InvariantCultureIgnoreCase)).SingleOrDefault();
             if (tableMeta == null)
                 Response.Redirect("~/404.aspx");
-            
-            var gridCreator = new MasterGridCreator(tableMeta, connectionString);
+
+            var user = HttpContext.Current.Session["user"] as User;
+            var sessionName = string.Format("accessRights_{0}_{1}", user == null ? "default" : user.UserName, HttpContext.Current.Request.RawUrl);
+            permissions = Session[sessionName] as List<PermissionType>;
+            var gridCreator = new MasterGridCreator(tableMeta, connectionString, permissions);
             masterGrid = gridCreator.CreateMasterGrid();
             var masterPage = this.Controls[0] as IMainMaster;
             if (masterPage == null)
@@ -68,5 +75,6 @@ namespace DotWeb.UI
         {
             masterGrid.DataBind();
         }
+
     }
 }

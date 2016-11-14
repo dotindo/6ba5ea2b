@@ -65,5 +65,32 @@ namespace DotWeb.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource appsDataSource;
+        
+        /// <summary>
+        /// groupRightsDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource groupRightsDataSource;
+        
+        /// <summary>
+        /// moduleRightsDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource moduleRightsDataSource;
+        
+        /// <summary>
+        /// roleDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource roleDataSource;
     }
 }

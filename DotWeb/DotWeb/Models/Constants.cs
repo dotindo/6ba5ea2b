@@ -25,5 +25,9 @@ namespace DotWeb
         /// Default value for App.DefaultGroupName.
         /// </summary>
         public static string DefaultDefaultGroupName = "Ungrouped";
+
+        public static string Administrators = "Administrators";
+
+        public static string Everyone = "Everyone";
     }
 }

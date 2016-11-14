@@ -41,6 +41,14 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -62,10 +70,23 @@
     <Compile Include="Migrations\201610200014335_Initial.Designer.cs">
       <DependentUpon>201610200014335_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201610310255194_Security.cs" />
+    <Compile Include="Migrations\201610310255194_Security.Designer.cs">
+      <DependentUpon>201610310255194_Security.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\App.cs" />
+    <Compile Include="Models\IdentityDb.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DotWebDb.cs" />
     <Compile Include="Dynamic\SchemaInfo.cs" />
+    <Compile Include="Models\Permission.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\UserGroup.cs" />
+    <Compile Include="Models\UserGroupMembers.cs" />
+    <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\SmsService.cs" />
     <Compile Include="UI\EditPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -81,7 +102,7 @@
     <Compile Include="UI\MultipleDetailGridTemplate.cs" />
     <Compile Include="Utils\FKInfo.cs" />
     <Compile Include="UI\GridViewHelper.cs" />
-    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\ModuleGroup.cs" />
     <Compile Include="Models\Module.cs" />
     <Compile Include="Models\ColumnMeta.cs" />
     <Compile Include="Utils\PKInfo.cs" />
@@ -224,6 +245,10 @@
   <ItemGroup>
     <Content Include="lib\readme.txt" />
     <Content Include="readme.txt" />
+    <EmbeddedResource Include="Migrations\201610310255194_Security.resx">
+      <DependentUpon>201610310255194_Security.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_data\init-data-security.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201610200014335_Initial.resx">
