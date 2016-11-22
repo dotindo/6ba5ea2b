@@ -35,6 +35,11 @@
         <dx:ASPxTextBox ID="tbLastName" runat="server" Width="200px">
         </dx:ASPxTextBox>
     </div>
+    <dx:ASPxLabel ID="lblOrganization" runat="server" AssociatedControlID="cbOrganization" Text="Organization:" />
+    <div class="form-field">
+        <dx:ASPxComboBox ID="cbOrganization" runat="server" Width="200px" DataSourceID="organizationsDataSource" ValueField="Code" TextField="Name">
+        </dx:ASPxComboBox>
+    </div>
     <dx:ASPxLabel ID="lblPassword" runat="server" AssociatedControlID="tbPassword" Text="Password:" />
     <div class="form-field">
         <dx:ASPxTextBox ID="tbPassword" ClientInstanceName="Password" Password="true" runat="server"
@@ -65,5 +70,5 @@
     <dx:ASPxButton ID="btnCreateUser" runat="server" Text="Create User" ValidationGroup="RegisterUserValidationGroup"
         OnClick="btnCreateUser_Click">
     </dx:ASPxButton>
-
+    <ef:EntityDataSource ID="organizationsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Organizations" />
 </asp:Content>

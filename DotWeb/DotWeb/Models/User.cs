@@ -39,6 +39,11 @@ namespace DotWeb
         [Required, MaxLength(100)]
         public string Email { get; set; }
 
-    }
+        [MaxLength(20)]
+        public string OrganizationCode { get; set; }
+        public virtual Organization Organization { get; set; }
 
+        [MaxLength(50)]
+        public string AuthKey { get; set; }
+    }
 }

@@ -30,6 +30,8 @@ namespace DotWeb
 
         public DbSet<AccessRight> AccessRights { get; set; }
 
+        public DbSet<Organization> Organizations { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -56,6 +58,8 @@ namespace DotWeb
             modelBuilder.Entity<UserGroupMembers>().HasRequired(m => m.Group).WithMany().HasForeignKey(m => m.GroupId).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AccessRight>().HasRequired(r => r.Role).WithMany().HasForeignKey(r => r.RoleId).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>().HasOptional(u => u.Organization).WithMany().HasForeignKey(u => u.OrganizationCode).WillCascadeOnDelete(false);
         }
     }
 }

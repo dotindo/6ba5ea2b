@@ -19,6 +19,10 @@
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="Email" Caption="Email">
             </dx:GridViewDataTextColumn>
+            <dx:GridViewDataComboBoxColumn FieldName="OrganizationCode" Caption="Organization" ReadOnly="true">
+                <PropertiesComboBox DataSourceID="organizationsDataSource" ValueField="Code" TextField="Name">
+                </PropertiesComboBox>
+            </dx:GridViewDataComboBoxColumn>
 		</Columns>
 		<Settings ShowGroupPanel="false" />
 		<SettingsPager PageSize="25" />
@@ -28,4 +32,5 @@
 		<BorderBottom BorderWidth="1px" />
 	</dx:ASPxGridView>
     <ef:EntityDataSource ID="usersDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Users" />
+    <ef:EntityDataSource ID="organizationsDataSource" runat="server" ContextTypeName="DotWeb.DotWebDb" EntitySetName="Organizations" />
 </asp:Content>

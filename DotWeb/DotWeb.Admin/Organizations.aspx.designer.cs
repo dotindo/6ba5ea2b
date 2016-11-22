@@ -10,7 +10,7 @@
 namespace DotWeb.Admin {
     
     
-    public partial class Users {
+    public partial class Organizations {
         
         /// <summary>
         /// gridView control.
@@ -20,15 +20,6 @@ namespace DotWeb.Admin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::DevExpress.Web.ASPxGridView gridView;
-        
-        /// <summary>
-        /// usersDataSource control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Microsoft.AspNet.EntityDataSource.EntityDataSource usersDataSource;
         
         /// <summary>
         /// organizationsDataSource control.

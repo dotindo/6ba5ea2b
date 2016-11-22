@@ -74,9 +74,14 @@
     <Compile Include="Migrations\201610310255194_Security.Designer.cs">
       <DependentUpon>201610310255194_Security.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611220643075_Organization.cs" />
+    <Compile Include="Migrations\201611220643075_Organization.Designer.cs">
+      <DependentUpon>201611220643075_Organization.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\App.cs" />
     <Compile Include="Models\IdentityDb.cs" />
+    <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DotWebDb.cs" />
@@ -247,6 +252,9 @@
     <Content Include="readme.txt" />
     <EmbeddedResource Include="Migrations\201610310255194_Security.resx">
       <DependentUpon>201610310255194_Security.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611220643075_Organization.resx">
+      <DependentUpon>201611220643075_Organization.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_data\init-data-security.sql" />
   </ItemGroup>
