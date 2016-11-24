@@ -19,7 +19,7 @@
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="Email" Caption="Email">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataComboBoxColumn FieldName="OrganizationCode" Caption="Organization" ReadOnly="true">
+            <dx:GridViewDataComboBoxColumn FieldName="OrganizationId" Caption="Organization" ReadOnly="true">
                 <PropertiesComboBox DataSourceID="organizationsDataSource" ValueField="Code" TextField="Name">
                 </PropertiesComboBox>
             </dx:GridViewDataComboBoxColumn>
