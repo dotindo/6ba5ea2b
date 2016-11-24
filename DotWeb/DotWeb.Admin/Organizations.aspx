@@ -7,7 +7,7 @@
 		<Columns>
 			<dx:GridViewCommandColumn ShowDeleteButton="true" ShowEditButton="true" ShowNewButtonInHeader="true" VisibleIndex="0">
 			</dx:GridViewCommandColumn>
-            <dx:GridViewDataTextColumn FieldName="Code" Caption="Code" Visible="true">
+            <dx:GridViewDataTextColumn FieldName="Id" Caption="Id" Visible="true">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="Name" Caption="Name">
             </dx:GridViewDataTextColumn>

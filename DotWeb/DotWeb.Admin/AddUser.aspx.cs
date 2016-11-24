@@ -39,7 +39,7 @@ namespace DotWeb.Admin
                                 Email = user.Email, 
                                 FirstName = tbFirstName.Text, 
                                 LastName = tbLastName.Text,
-                                OrganizationCode = cbOrganization.SelectedItem == null ? null : cbOrganization.SelectedItem.Value.ToString()
+                                OrganizationId = cbOrganization.SelectedItem == null ? null : (int?)int.Parse(cbOrganization.SelectedItem.Value.ToString())
                             };
                             appContext.Users.Add(appUser);
                             appContext.SaveChanges();

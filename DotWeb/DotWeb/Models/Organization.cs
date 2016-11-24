@@ -5,8 +5,7 @@ namespace DotWeb
 {
     public class Organization
     {
-        [Key, MaxLength(20)]
-        public string Code { get; set; }
+        public int Id { get; set; }
 
         [Required, MaxLength(50)]
         public string Name { get; set; }

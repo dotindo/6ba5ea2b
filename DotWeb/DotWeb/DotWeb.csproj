@@ -78,6 +78,10 @@
     <Compile Include="Migrations\201611220643075_Organization.Designer.cs">
       <DependentUpon>201611220643075_Organization.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611240711470_OrgCodeChange.cs" />
+    <Compile Include="Migrations\201611240711470_OrgCodeChange.Designer.cs">
+      <DependentUpon>201611240711470_OrgCodeChange.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\App.cs" />
     <Compile Include="Models\IdentityDb.cs" />
@@ -255,6 +259,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201611220643075_Organization.resx">
       <DependentUpon>201611220643075_Organization.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611240711470_OrgCodeChange.resx">
+      <DependentUpon>201611240711470_OrgCodeChange.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_data\init-data-security.sql" />
   </ItemGroup>

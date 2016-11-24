@@ -37,7 +37,7 @@
     </div>
     <dx:ASPxLabel ID="lblOrganization" runat="server" AssociatedControlID="cbOrganization" Text="Organization:" />
     <div class="form-field">
-        <dx:ASPxComboBox ID="cbOrganization" runat="server" Width="200px" DataSourceID="organizationsDataSource" ValueField="Code" TextField="Name">
+        <dx:ASPxComboBox ID="cbOrganization" runat="server" Width="200px" DataSourceID="organizationsDataSource" ValueField="Id" TextField="Name">
         </dx:ASPxComboBox>
     </div>
     <dx:ASPxLabel ID="lblPassword" runat="server" AssociatedControlID="tbPassword" Text="Password:" />

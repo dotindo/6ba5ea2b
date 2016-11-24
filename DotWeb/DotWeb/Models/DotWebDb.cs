@@ -59,7 +59,7 @@ namespace DotWeb
 
             modelBuilder.Entity<AccessRight>().HasRequired(r => r.Role).WithMany().HasForeignKey(r => r.RoleId).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<User>().HasOptional(u => u.Organization).WithMany().HasForeignKey(u => u.OrganizationCode).WillCascadeOnDelete(false);
+            modelBuilder.Entity<User>().HasOptional(u => u.Organization).WithMany().HasForeignKey(u => u.OrganizationId).WillCascadeOnDelete(false);
         }
     }
 }
