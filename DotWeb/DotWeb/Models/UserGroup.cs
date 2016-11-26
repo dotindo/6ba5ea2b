@@ -13,6 +13,9 @@ namespace DotWeb
         [Key, MaxLength(128)]
         public string Id { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int GroupId { get; set; }
+
         [Required, MaxLength(50)]
         public string GroupName { get; set; }
 

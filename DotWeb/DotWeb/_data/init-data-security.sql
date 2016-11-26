@@ -33,8 +33,15 @@ INSERT [dbo].[UserGroups] ([Id], [GroupName], [Description], [AppId])
 INSERT [dbo].[UserGroups] ([Id], [GroupName], [Description], [AppId]) 
 	VALUES (N'b50de242-2758-4ff5-a644-47b506ee39dd', 'Readers', 'Readers of Northwind Sample', 2)
 
+INSERT [dbo].[UserGroups] ([Id], [GroupName], [Description], [AppId]) 
+	VALUES (N'cf6a4faf-dff0-429a-82b1-a8875bd4b398', 'Administrators', 'Administrators of Mercedes App', 3)
+INSERT [dbo].[UserGroups] ([Id], [GroupName], [Description], [AppId]) 
+	VALUES (N'440efbaf-4808-4dee-b4fe-952cf9377bc6', 'Editors', 'Editors of Mercedes App', 3)
+INSERT [dbo].[UserGroups] ([Id], [GroupName], [Description], [AppId]) 
+	VALUES (N'a58dc8e7-bd53-43cf-9c86-551f600702d7', 'Readers', 'Readers of Mercedes App', 3)
 
--- user agus, admin are a member of Administrators group
+
+-- user agus, admin are a member of Administrators group of App Id 2
 INSERT [dbo].[UserGroupMembers] ([UserId], [GroupId]) VALUES (N'c42138f3-882b-4eb9-9ca3-1a613ed54ef5', N'547c24e4-e620-4375-95f6-7f87e30e369e')
 INSERT [dbo].[UserGroupMembers] ([UserId], [GroupId]) VALUES (N'fa646366-7cc2-4129-86c7-1d486af1a2e8', N'547c24e4-e620-4375-95f6-7f87e30e369e')
 -- user editor is a member of Editors group
@@ -42,12 +49,28 @@ INSERT [dbo].[UserGroupMembers] ([UserId], [GroupId]) VALUES (N'570a3e29-fdfe-41
 -- user reader is a member of Readers group
 INSERT [dbo].[UserGroupMembers] ([UserId], [GroupId]) VALUES (N'907030bc-46d5-40c0-af39-34bfa7ea1b5b', N'b50de242-2758-4ff5-a644-47b506ee39dd')
 
+-- user admin are a member of Administrators group of App Id 3
+INSERT [dbo].[UserGroupMembers] ([UserId], [GroupId]) VALUES (N'fa646366-7cc2-4129-86c7-1d486af1a2e8', N'cf6a4faf-dff0-429a-82b1-a8875bd4b398')
+-- user editor is a member of Editors group
+INSERT [dbo].[UserGroupMembers] ([UserId], [GroupId]) VALUES (N'570a3e29-fdfe-4129-a7d4-2aa74941de21', N'440efbaf-4808-4dee-b4fe-952cf9377bc6')
+-- user reader is a member of Readers group
+INSERT [dbo].[UserGroupMembers] ([UserId], [GroupId]) VALUES (N'907030bc-46d5-40c0-af39-34bfa7ea1b5b', N'a58dc8e7-bd53-43cf-9c86-551f600702d7')
+
+
 SET IDENTITY_INSERT [dbo].[Roles] ON
 INSERT [dbo].[Roles] ([Id], [Name], [Description], [AppId]) VALUES (1, 'Full Control', null, 2)
 INSERT [dbo].[Roles] ([Id], [Name], [Description], [AppId]) VALUES (2, 'Editor', null, 2)
 INSERT [dbo].[Roles] ([Id], [Name], [Description], [AppId]) VALUES (3, 'Reader', null, 2)
 INSERT [dbo].[Roles] ([Id], [Name], [Description], [AppId]) VALUES (4, 'No Access', null, 2)
 SET IDENTITY_INSERT [dbo].[Roles] OFF
+
+SET IDENTITY_INSERT [dbo].[Roles] ON
+INSERT [dbo].[Roles] ([Id], [Name], [Description], [AppId]) VALUES (5, 'Full Control', null, 3)
+INSERT [dbo].[Roles] ([Id], [Name], [Description], [AppId]) VALUES (6, 'Editor', null, 3)
+INSERT [dbo].[Roles] ([Id], [Name], [Description], [AppId]) VALUES (7, 'Reader', null, 3)
+INSERT [dbo].[Roles] ([Id], [Name], [Description], [AppId]) VALUES (8, 'No Access', null, 3)
+SET IDENTITY_INSERT [dbo].[Roles] OFF
+
 
 SET IDENTITY_INSERT [dbo].[Permissions] ON
 -- Full control on 2
@@ -71,7 +94,20 @@ INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (13, 5, 3)
 
 -- No Access on 2
 INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (14, 0, 4)
+SET IDENTITY_INSERT [dbo].[Permissions] OFF
 
+SET IDENTITY_INSERT [dbo].[Permissions] ON
+-- Full control on 3
+INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (15, 1, 5)
+INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (16, 2, 5)
+INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (17, 3, 5)
+INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (18, 4, 5)
+INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (19, 5, 5)
+INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (20, 9, 5)
+
+-- Reader on 3
+INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (21, 1, 7)
+INSERT [dbo].[Permissions] ([Id], [PermissionType], [RoleId]) VALUES (22, 5, 7)
 SET IDENTITY_INSERT [dbo].[Permissions] OFF
 
 SET IDENTITY_INSERT [dbo].[AccessRights] ON
@@ -87,4 +123,13 @@ INSERT [dbo].[AccessRights] ([Id], [PrincipalId], [PrincipalType], [RoleId], [Se
 -- give Everyone access : Reader to AppId 2
 INSERT [dbo].[AccessRights] ([Id], [PrincipalId], [PrincipalType], [RoleId], [SecuredObjectId], [SecuredObjectType])
 	VALUES(4, 'ef8e6353-bb56-4a9e-ae42-5db03833b35e', 2, 3, 2, 1)
+SET IDENTITY_INSERT [dbo].[AccessRights] OFF
+
+SET IDENTITY_INSERT [dbo].[AccessRights] ON
+-- give Administrators access : Full Control to AppId 3
+INSERT [dbo].[AccessRights] ([Id], [PrincipalId], [PrincipalType], [RoleId], [SecuredObjectId], [SecuredObjectType])
+	VALUES(5, 'cf6a4faf-dff0-429a-82b1-a8875bd4b398', 2, 5, 3, 1)
+-- give Readers access : Reader to AppId 3
+INSERT [dbo].[AccessRights] ([Id], [PrincipalId], [PrincipalType], [RoleId], [SecuredObjectId], [SecuredObjectType])
+	VALUES(6, 'a58dc8e7-bd53-43cf-9c86-551f600702d7', 2, 7, 3, 1)
 SET IDENTITY_INSERT [dbo].[AccessRights] OFF

@@ -16,6 +16,9 @@ namespace DotWeb
         [Key, MaxLength(128)]
         public string Id { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int UserId { get; set; }
+
         [Required, MaxLength(50)]
         public string UserName { get; set; }
 

@@ -82,6 +82,10 @@
     <Compile Include="Migrations\201611240711470_OrgCodeChange.Designer.cs">
       <DependentUpon>201611240711470_OrgCodeChange.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611260408498_UserId.cs" />
+    <Compile Include="Migrations\201611260408498_UserId.Designer.cs">
+      <DependentUpon>201611260408498_UserId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\AccessRight.cs" />
     <Compile Include="Models\App.cs" />
     <Compile Include="Models\IdentityDb.cs" />
@@ -263,6 +267,9 @@
     <EmbeddedResource Include="Migrations\201611240711470_OrgCodeChange.resx">
       <DependentUpon>201611240711470_OrgCodeChange.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611260408498_UserId.resx">
+      <DependentUpon>201611260408498_UserId.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="_data\init-data-security.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -273,7 +280,9 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)\..\..\5c567933\DotMercy\DotMercy\lib\DotWeb\$(ProjectName).dll"
-copy /Y "$(TargetDir)$(ProjectName).pdb" "$(SolutionDir)\..\..\5c567933\DotMercy\DotMercy\lib\DotWeb\$(ProjectName).pdb"</PostBuildEvent>
+copy /Y "$(TargetDir)$(ProjectName).pdb" "$(SolutionDir)\..\..\5c567933\DotMercy\DotMercy\lib\DotWeb\$(ProjectName).pdb"
+copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)\..\..\9deddde2\DotMercy\DotMercy\lib\DotWeb\$(ProjectName).dll"
+copy /Y "$(TargetDir)$(ProjectName).pdb" "$(SolutionDir)\..\..\9deddde2\DotMercy\DotMercy\lib\DotWeb\$(ProjectName).pdb"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

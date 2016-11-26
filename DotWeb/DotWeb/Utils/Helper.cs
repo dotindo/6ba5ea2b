@@ -132,7 +132,7 @@ namespace DotWeb.Utils
         /// <returns></returns>
         public static string ToTitleCase(this string inputStr)
         {
-            var words = inputStr.Split(new char[] { '_' });
+            var words = inputStr.Split(new char[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
             var sb = new StringBuilder();
             foreach (var word in words)
                 sb = sb.AppendFormat("{0}{1}", word.First().ToString().ToUpper(), string.Join("", word.Skip(1)));
